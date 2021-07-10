@@ -6,7 +6,8 @@ from celery.utils.log import get_task_logger
 from celery.signals import task_postrun
 
 # from celery.contrib import rdb
-# from celery.schedules import crontab
+from celery.schedules import crontab
+import root_app.tasks
  
 # https://soshace.com/dockerizing-django-with-postgres-redis-and-celery/ 
  
@@ -21,7 +22,7 @@ def setup_periodic_tasks(sender, **kwargs):
     print('Inside setup_periodic_tasks')
     results = []
     for i in range(3):
-        async_result = test.delay(i)
+        async_result = test_task.delay(i)
         results.append(async_result)
         print('Execute task', i, '-', async_result.status)
     
@@ -54,7 +55,7 @@ def setup_periodic_tasks(sender, **kwargs):
     # sender.add_periodic_task(3.0, test.s('world'), name='world', expires=10)
 
 @app.task(track_started=True)
-def test(arg):
+def test_task(arg):
     logger.info('Inside task function with argument {0}'.format(arg))
     # print('Inside task function')
     # print(arg)
@@ -65,9 +66,9 @@ def test(arg):
     return "Success-zzz"
 
 
-print('Before autodiscover_tasks')
+# print('Before autodiscover_tasks')
 app.autodiscover_tasks()
-print('After autodiscover_tasks')
+# print('After autodiscover_tasks')
 
 @task_postrun.connect
 def after_task(**kwargs):
@@ -84,4 +85,3 @@ def after_task(**kwargs):
     logger.info('state - ' + kwargs.get('state'))
     logger.info('retval - ' + kwargs.get('retval'))
     logger.info('END after_task')
-    

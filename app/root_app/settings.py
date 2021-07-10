@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from celery.schedules import crontab
+import root_app.tasks
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,8 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ.get('SECRET_KEY')
-SECRET_KEY = 'django-insecure-zongw$061ws-y__f^&k67la)g5u1h#gc_t58$7ie%u6pl$ok-4'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+# SECRET_KEY = 'django-insecure-zongw$061ws-y__f^&k67la)g5u1h#gc_t58$7ie%u6pl$ok-4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
@@ -143,3 +145,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
+
+CELERY_BEAT_SCHEDULE = {
+    "sample_task": {
+        "task": "root_app.tasks.sample_task",
+        "schedule": crontab(minute="*/1"),
+    },
+}
