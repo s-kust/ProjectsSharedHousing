@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     
     # local
     'schemas.apps.SchemasConfig',
-    'core',
-    'portfoliopositionsreport',
+    'core.apps.CoreConfig',
+    'portfoliopositionsreport.apps.PortfoliopositionsreportConfig',
 ]
 
 MIDDLEWARE = [
