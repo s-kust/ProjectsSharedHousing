@@ -28,6 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
+# DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -151,4 +152,13 @@ CELERY_BEAT_SCHEDULE = {
         "task": "root_app.tasks.sample_task",
         "schedule": crontab(minute="*/1"),
     },
+    
+    "send_email_report": {
+        "task": "root_app.tasks.send_email_report",
+        "schedule": crontab(minute=20, hour=7, day_of_week='mon,tue,wed,thu,fri,sat,sun'),
+    },
 }
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "noreply@email.com"
+ADMINS = [("testuser", "test.user@email.com"), ]
