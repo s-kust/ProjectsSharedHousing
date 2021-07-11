@@ -38,6 +38,7 @@ services:
       # - "6900-7000:6900-7000"
     build:
       context: .
+      dockerfile: Dockerfile_b
     command: celery -A root_app worker -l info --logfile=celery_log.log
     volumes:
       - ./app:/app
@@ -53,6 +54,7 @@ services:
       # - "6900-7000:6900-7000"
     build:
       context: .
+      dockerfile: Dockerfile_b
     command: celery -A root_app beat -l info --logfile=celery_log.log
     volumes:
       - ./app:/app

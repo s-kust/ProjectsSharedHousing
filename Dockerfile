@@ -1,12 +1,11 @@
-FROM python:3.8-alpine
+# FROM python:3.8-alpine
+FROM python:3.6.4-slim-jessie
  
 ENV PYTHONUNBUFFERED 1
 COPY ./requirements.txt /requirements.txt
-RUN apk add --update --no-cache postgresql-client jpeg-dev \
-	&& apk add --update --no-cache --virtual .tmp-build-deps \ 
-    gcc libc-dev linux-headers postgresql-dev musl-dev zlib zlib-dev \
+RUN pip install --upgrade pip \
 	&& pip install -r /requirements.txt \
-	&& apk del .tmp-build-deps
-RUN mkdir /app 
+	&& mkdir /app 
+# RUN mkdir /app 
 COPY ./app /app
 WORKDIR /app

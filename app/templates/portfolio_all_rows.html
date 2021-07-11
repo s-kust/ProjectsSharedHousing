@@ -1,0 +1,24 @@
+{% extends '_base.html' %}
+
+{% block content %}
+<p>Please see the project code and description on <a href="https://github.com/s-kust/PortfolioPositionsReports" target="_blank">github</a></p>
+<table class="table-bordered">
+  <tr>
+    <th>Ticker 1</th>
+	<th>Ticker 2</th>
+	<th>Type</th>
+	<th>Note</th>
+	<th>Link</th>
+  </tr>
+{% for portfolio_row in object_list %}
+<tr>
+    <td>{{ portfolio_row.ticker_1 }}</td>
+	<td>{{ portfolio_row.ticker_2 }}</td>
+	<td>{{ portfolio_row.row_type }}</td>
+	<td>{{ portfolio_row.note }}</td>
+	<td><a href="{% url 'row_charts' portfolio_row.pk %}">charts</a></td>
+</tr>
+{% endfor %}  
+</table>
+{% endblock %}
+

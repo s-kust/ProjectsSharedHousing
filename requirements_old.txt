@@ -12,14 +12,7 @@ gunicorn
 model-bakery
 psycopg2-binary
 pytz
-selenium
 sqlparse
 typing-extensions
 urllib3
 whitenoise
-pandas
-numpy
-gspread
-oauth2client
-configparser
-mplfinance

@@ -89,7 +89,7 @@ class SchemaView(TemplateView):
 
     def process_btn_add_column(self, elem, form_data):
         # print('Add Column button processing')
-        primary_key_determined= [int(s) for s in elem.split("_") if s.isdigit()][0]
+        primary_key_determined = [int(s) for s in elem.split("_") if s.isdigit()][0]
         # self.pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
         form = DataSchemaForm(form_data, schema_pk=primary_key_determined)
         if form.is_valid():
@@ -196,12 +196,12 @@ class SchemaView(TemplateView):
     }
 
     def post(self, request, *args, **kwargs):
-        # print()
-        # print('Inside SchemaView post')
-        # print(request.POST)
-        # print()
-        # print(self.kwargs)
-        # print()
+        print()
+        print('Inside SchemaView post')
+        print(request.POST)
+        print()
+        print(self.kwargs)
+        print()
         context = self.get_context_data()
         determined_primary_key = self.kwargs.get("pk", None)
         # self.pk = self.kwargs.get("pk", None)

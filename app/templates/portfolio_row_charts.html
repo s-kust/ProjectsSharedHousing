@@ -1,0 +1,17 @@
+{% extends '_base.html' %}
+
+{% block content %}
+{% load static %}
+{% if row.filename_1 != '' %}
+{% with path=row.filename_1  %}
+<p><img src="{% static path %}"></p>
+{% endwith %}
+{% endif %}
+{% if row.filename_2 != '' %}
+{% with path=row.filename_2  %}
+<p><img src="{% static path %}"></p>
+{% endwith %}
+{% endif %}
+<a href="{% url 'portfolio_root' %}">Return to the list of all portfolio items</a>
+{% endblock %}
+

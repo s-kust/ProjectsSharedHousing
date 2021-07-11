@@ -1,18 +1,18 @@
-import pandas as pd
-import numpy as np
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 # from IPython.core.debugger import set_trace
-import mplfinance as mpf
 import os
 import glob
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 import configparser
 import asyncio
 import datetime
+import pandas as pd
+import numpy as np
+import mplfinance as mpf
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 
 class DataStore:
@@ -48,15 +48,15 @@ def create_email_subject(symbol1, symbol2=None):
 def create_charts(tickers_data, symbol1, symbol2=None):
     if symbol2 is None:
         job_type = "single"
-        filename_1 = symbol1 + "_short_period" + ".png"
-        filename_1 = os.path.join('images', filename_1)
-        filename_2 = symbol1 + "_long_period" + ".png"
-        filename_2 = os.path.join('images', filename_2)
+        filename_1 = symbol1 + "_long_period" + ".png"
+        filename_1 = os.path.join('static', filename_1)
+        filename_2 = symbol1 + "_short_period" + ".png"
+        filename_2 = os.path.join('static', filename_2)
         data = tickers_data[symbol1]
     else:
         job_type = "relative"
         filename_1 = symbol1 + "_" + symbol2 + ".png"
-        filename_1 = os.path.join('images', filename_1)
+        filename_1 = os.path.join('static', filename_1)
         filename_2 = None
         data = tickers_data[symbol1] / tickers_data[symbol2]
     my_plots_dpi = 100  # number determined by trial and error
@@ -64,10 +64,11 @@ def create_charts(tickers_data, symbol1, symbol2=None):
         res1 = data.tail(350)  # 350 last trading days, approximately 1.5 years
         mpf.plot(res1, type="line", style="yahoo", title=symbol1 + " Daily Prices last 1.5 years",
                  figsize=(794 / my_plots_dpi, 512 / my_plots_dpi), savefig=filename_1, )
-        res1 = data.tail(50)  # 50 last trading days - more days it is inconvenient to look at the chart
+        res1 = data.tail(50)  # 50 last trading days - more days is inconvenient at the chart
         atr_plot = mpf.make_addplot(res1["ATR"], panel=2, ylabel="ATR")
-        mpf.plot(res1, type="ohlc", style="yahoo", addplot=atr_plot, title=symbol1 + " Daily Prices last 2.5 months",
-                 volume=True, figsize=(794 / my_plots_dpi, 512 / my_plots_dpi), savefig=filename_2, )
+        mpf.plot(res1, type="ohlc", style="yahoo", addplot=atr_plot, \
+            title=symbol1 + " Daily Prices last 2.5 months", \
+                volume=True, figsize=(794 / my_plots_dpi, 512 / my_plots_dpi), savefig=filename_2, )
     else:  # job_type relative, two symbols, not single, only one chart
         res1 = data.tail(350)  # 350 last trading days, approximately 1.5 years
         mpf.plot(res1, type="line", style="yahoo",
@@ -316,7 +317,7 @@ def process_full():
     config = configparser.ConfigParser()
     config.read("config.ini")
     data_store = DataStore(config)
-    png_files = [file for file in glob.glob("images/*.png")]
+    png_files = [file for file in glob.glob("static/*.png")]
     for png_file in png_files:
         os.remove(png_file)
     if not os.path.exists('images'):
