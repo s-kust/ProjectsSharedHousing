@@ -1,26 +1,15 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import TemplateView, ListView
-from django.urls import reverse_lazy
-from django.views.generic.edit import DeleteView
 from django.views.decorators.http import require_POST
-from .forms import DataSchemaForm
-from schemas.models import *
 from django.http import HttpResponseServerError
 from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
 from django.forms import ModelForm
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import (
-    Layout,
-    Submit,
-    Row,
-    Column,
-    Fieldset,
-    Field,
-    Hidden,
-    ButtonHolder,
-)
+from crispy_forms.layout import Submit
+from .forms import DataSchemaForm
+from schemas.models import *
 
 
 class AllSchemasView(ListView):
@@ -29,9 +18,9 @@ class AllSchemasView(ListView):
 
 
 @require_POST
-def delete_schema(request, pk):
+def delete_schema(request, primary_key):
     if request.method:
-        query = get_object_or_404(DataSchemas, pk=pk)
+        query = get_object_or_404(DataSchemas, pk=primary_key)
         query.delete()
     return redirect("all_schemas")
 
@@ -100,10 +89,11 @@ class SchemaView(TemplateView):
 
     def process_btn_add_column(self, elem, form_data):
         # print('Add Column button processing')
-        self.pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
-        form = DataSchemaForm(form_data, schema_pk=self.pk)
+        primary_key_determined= [int(s) for s in elem.split("_") if s.isdigit()][0]
+        # self.pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
+        form = DataSchemaForm(form_data, schema_pk=primary_key_determined)
         if form.is_valid():
-            schema = get_object_or_404(DataSchemas, pk=self.pk)
+            schema = get_object_or_404(DataSchemas, pk=primary_key_determined)
             new_column_type = form.cleaned_data["add_column_type"]
             new_column = globals()[new_column_type]()
             new_column.name = form.cleaned_data["add_column_name"]
@@ -111,24 +101,25 @@ class SchemaView(TemplateView):
             new_column.schema = schema
             try:
                 new_column.save()
-            except Exception as err:
+            except Exception:
                 pass
         else:
             return HttpResponseServerError()
-        return (self.pk, None)
+        return (primary_key_determined, None)
 
     def process_btn_delete_column(self, elem, form_data):
         # print('Delete Column button processing')
         column_pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
-        self.pk = SchemaColumn.objects.get(pk=column_pk).schema.pk
+        primary_key_to_return = SchemaColumn.objects.get(pk=column_pk).schema.pk
+        # self.pk = SchemaColumn.objects.get(pk=column_pk).schema.pk
         SchemaColumn.objects.get(pk=column_pk).delete()
-        return (self.pk, None)
+        return (primary_key_to_return, None)
 
     def process_btn_edit_column_details(self, elem, form_data):
         # print('Edit Column details button processing')
         column_pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
         column = get_object_or_404(SchemaColumn, pk=column_pk)
-        self.pk = column.schema.pk
+        # self.pk = column.schema.pk
         for subclass in self.subclasses:
             if hasattr(column, subclass):
                 column_model = apps.get_model("schemas", subclass)
@@ -151,10 +142,11 @@ class SchemaView(TemplateView):
 
     def process_btn_submit_form(self, elem, form_data):
         # print('Submit Form button processing')
-        self.pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
-        form = DataSchemaForm(form_data, schema_pk=self.pk)
+        determined_primary_key = [int(s) for s in elem.split("_") if s.isdigit()][0]
+        # self.pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
+        form = DataSchemaForm(form_data, schema_pk=determined_primary_key)
         if form.is_valid():
-            schema = get_object_or_404(DataSchemas, pk=self.pk)
+            schema = get_object_or_404(DataSchemas, pk=determined_primary_key)
             schema.name = form.cleaned_data["name"]
             schema.column_separator = form.cleaned_data["column_separator"]
             schema.string_character = form.cleaned_data["string_character"]
@@ -162,13 +154,14 @@ class SchemaView(TemplateView):
             self.save_schema_columns(schema, form)
         else:
             return HttpResponseServerError()
-        return (self.pk, None)
+        return (determined_primary_key, None)
 
     def process_btn_save_chng_column(self, elem, form_data):
         # print('Save Changes in Column button processing')
         column_pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
         column = get_object_or_404(SchemaColumn, pk=column_pk)
-        self.pk = column.schema.pk
+        determined_primary_key = column.schema.pk
+        # self.pk = column.schema.pk
         for subclass in self.subclasses:
             if hasattr(column, subclass):
                 column_model = apps.get_model("schemas", subclass)
@@ -185,14 +178,14 @@ class SchemaView(TemplateView):
                 if form.is_valid():
                     form.save()
                 else:
-                    return (self.pk, form)
+                    return (determined_primary_key, form)
 
                 # from pprint import pprint
                 # print()
                 # print('After form save')
                 # pprint(vars(column))
                 # print()
-        return (self.pk, None)
+        return (determined_primary_key, None)
 
     btn_functions = {
         "add_new_col": process_btn_add_column,
@@ -210,16 +203,18 @@ class SchemaView(TemplateView):
         # print(self.kwargs)
         # print()
         context = self.get_context_data()
-        self.pk = self.kwargs.get("pk", None)
-        if self.pk is not None:
+        determined_primary_key = self.kwargs.get("pk", None)
+        # self.pk = self.kwargs.get("pk", None)
+        if determined_primary_key is not None:
             try:
-                schema = DataSchemas.objects.get(pk=self.pk)
+                _ = DataSchemas.objects.get(pk=determined_primary_key)
             except ObjectDoesNotExist:
                 return redirect("all_schemas")
         form = None
         btn_pressed = None
 
-        # source of key.startswith idea - https://stackoverflow.com/questions/13101853/select-post-get-parameters-with-regular-expression
+        # source of key.startswith idea - 
+        # https://stackoverflow.com/questions/13101853/select-post-get-parameters-with-regular-expression
         for key in request.POST:
             if key.startswith("delete_col_"):
                 btn_pressed = "delete_col"
@@ -234,7 +229,7 @@ class SchemaView(TemplateView):
 
             if btn_pressed is not None:
                 funt_to_call = self.btn_functions.get(btn_pressed)
-                self.pk, form = funt_to_call(self, key, form_data=request.POST)
+                determined_primary_key, form = funt_to_call(self, key, form_data=request.POST)
                 break
 
         # if self.pk:
@@ -242,7 +237,7 @@ class SchemaView(TemplateView):
         # else:
         # print('no self.pk determined, so processing case - create new schema')
         if form is None:
-            form = DataSchemaForm(schema_pk=self.pk)
+            form = DataSchemaForm(schema_pk=determined_primary_key)
         context["form"] = form
         return super(TemplateView, self).render_to_response({"form": context["form"]})
 

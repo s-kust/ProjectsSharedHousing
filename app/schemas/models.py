@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.urls import reverse
 
 INTEGER_CH = "IntegerColumn"
 FULLNAME_CH = "FullNameColumn"

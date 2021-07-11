@@ -6,5 +6,5 @@ urlpatterns = [
 path('create_schema/', SchemaView.as_view(), name='schema_create_update'),
 path('<int:pk>/', SchemaView.as_view(), name='schema_create_update'),
 path('', AllSchemasView.as_view(), name='all_schemas'),
-path('delete/<int:pk>/', views.delete_schema, name="delete_schema"),
+path('delete/<int:primary_key>/', views.delete_schema, name="delete_schema"),
 ]

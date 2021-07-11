@@ -1,20 +1,9 @@
 from django import forms
-from django.forms import ModelForm
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import (
-    Layout,
-    Submit,
-    Row,
-    Column,
-    Fieldset,
-    Field,
-    Hidden,
-    ButtonHolder,
-    HTML,
-)
-from crispy_forms.bootstrap import FormActions
-from schemas.models import *
-from django.apps import apps
+from crispy_forms.layout import Layout, Submit, Row, Column, Fieldset, Field, HTML
+from schemas.models import DataSchemas, IntegerColumn, SchemaColumn, \
+    COLUMN_SEPARATOR_CHOICES, COLUMN_TYPE_CHOICES, STRING_CHARACTER_CHOICES, \
+    INTEGER_CH, FULLNAME_CH, JOB_CH, COMPANY_CH, PHONE_CH
 
 
 class DataSchemaForm(forms.Form):
@@ -58,7 +47,7 @@ class DataSchemaForm(forms.Form):
             # so create new schema and its first column
             # with default parameters
             schema = DataSchemas.objects.create(name="New Schema")
-            int1 = IntegerColumn.objects.create(
+            _ = IntegerColumn.objects.create(
                 name="First Column",
                 schema=schema,
                 order=1,
