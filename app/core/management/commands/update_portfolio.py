@@ -16,11 +16,10 @@ class Command(BaseCommand):
         self.stdout.write()
         self.stdout.write("update_portfolio start 4")
 
-        # data_store = portfolio_report.process_full()
-        # portfolio_rows = data_store.all_ideas
-        portfolio_rows = portfolio_report.create_portfolio_df_from_worksheets()
-        # base_path = '/static/'
-        # print('base_path', base_path)
+        data_store = portfolio_report.process_full()
+        portfolio_rows = data_store.all_ideas
+        # portfolio_rows = portfolio_report.create_portfolio_df_from_worksheets()
+        base_path = '/static/'
         assert isinstance(portfolio_rows, pd.DataFrame)
         portfolio_today = Portfolio.objects.create()
         for _, row in portfolio_rows.iterrows():
@@ -31,20 +30,24 @@ class Command(BaseCommand):
                 row_type=row['Type'], note=row['Note'])
             portfolio_row.ticker_2 = np.where(pd.isna(row['Ticker2']), "", row['Ticker2'])
             if not pd.isna(row['Ticker2']) and row['Type'] == "Stocks_ETFs":
-                portfolio_row.filename_1 = row['Ticker1'] + "_" + row['Ticker2'] + ".png"
-                # portfolio_row.filename_1 = os.path.join(base_path, portfolio_row.filename_1)
-                portfolio_row.filename_2 = ""                
+                filename_1 = row['Ticker1'] + "_" + row['Ticker2'] + ".png"
+                filename_1 = os.path.join(base_path, filename_1)
+                portfolio_row.file_1 = filename_1               
             else:
                 if row['Type'] == "Forex":
-                    portfolio_row.filename_1 = row['Ticker1'] + "-" + row['Ticker2'] + "_short_period" + ".png"
-                    # portfolio_row.filename_1 = os.path.join(base_path, portfolio_row.filename_1)
-                    portfolio_row.filename_2 = row['Ticker1'] + "-" + row['Ticker2'] + "_long_period" + ".png"
-                    # portfolio_row.filename_2 = os.path.join(base_path, portfolio_row.filename_2)
+                    filename_1 = row['Ticker1'] + "-" + row['Ticker2'] + "_short_period" + ".png"                    
+                    filename_2 = row['Ticker1'] + "-" + row['Ticker2'] + "_long_period" + ".png"
+                    filename_1 = os.path.join(base_path, filename_1)
+                    filename_2 = os.path.join(base_path, filename_2)
+                    portfolio_row.file_1 = filename_1
+                    portfolio_row.file_2 = filename_2
                 else:
-                    portfolio_row.filename_1 = row['Ticker1'] + "_short_period" + ".png"
-                    # portfolio_row.filename_1 = os.path.join(base_path, portfolio_row.filename_1)
-                    portfolio_row.filename_2 = row['Ticker1'] + "_long_period" + ".png"
-                    # portfolio_row.filename_2 = os.path.join(base_path, portfolio_row.filename_2)
+                    filename_1 = row['Ticker1'] + "_short_period" + ".png"
+                    filename_2 = row['Ticker1'] + "_long_period" + ".png"
+                    filename_1 = os.path.join(base_path, filename_1)
+                    filename_2 = os.path.join(base_path, filename_2)
+                    portfolio_row.file_1 = filename_1
+                    portfolio_row.file_2 = filename_2
             portfolio_row.save()            
         rows_all = PortfolioRow.objects.all()
         print('rows_all', len(rows_all))

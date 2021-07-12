@@ -1,5 +1,5 @@
 import time
-from django.db import connections
+from django.db import connection
 from django.db.utils import OperationalError
 from django.core.management import BaseCommand
 import os
@@ -9,16 +9,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write('Waiting for database...')
-        db_conn = None
-        while not db_conn:
+        while True:
             try:
-                db_conn = connections['default']
-                # connection_parameters = {}
-                # connection_parameters['']
-                # conn = psycopg2.connect("dbname=suppliers user=postgres password=postgres")
-                # conn.close()
-            except OperationalError:
-                self.stdout.write('Database unavailable, waititng 1 second...')
+                connection.ensure_connection()
+            except Exception as e:
+                print(e)
+                self.stdout.write("Connection to database cannot be established.")
                 time.sleep(1)
-
+            else:
+                connection.close()
+                break
         self.stdout.write(self.style.SUCCESS('Database available!'))

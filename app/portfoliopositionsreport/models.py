@@ -20,10 +20,12 @@ class PortfolioRow(models.Model):
         default="Stocks_ETFs",
     )
     note = models.CharField(max_length=100)
-    filename_1 = models.CharField(max_length=45)
-    filename_2 = models.CharField(max_length=45, default="")
+    file_1 = models.ImageField(upload_to='static', null=True)
+    file_2 = models.ImageField(upload_to='static', null=True)
+    # filename_1 = models.CharField(max_length=45)
+    # filename_2 = models.CharField(max_length=45, default="")
 
     def __str__(self):
         return '%s %s %s %s %s %s' % (self.ticker_1, self.ticker_2,\
-            self.row_type, self.note, self.filename_1, self.filename_2)
+            self.row_type, self.note, self.file_1, self.file_2)
     

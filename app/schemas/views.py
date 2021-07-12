@@ -196,12 +196,12 @@ class SchemaView(TemplateView):
     }
 
     def post(self, request, *args, **kwargs):
-        print()
-        print('Inside SchemaView post')
-        print(request.POST)
-        print()
-        print(self.kwargs)
-        print()
+        # print()
+        # print('Inside SchemaView post')
+        # print(request.POST)
+        # print()
+        # print(self.kwargs)
+        # print()
         context = self.get_context_data()
         determined_primary_key = self.kwargs.get("pk", None)
         # self.pk = self.kwargs.get("pk", None)

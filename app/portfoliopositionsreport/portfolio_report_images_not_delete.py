@@ -46,17 +46,18 @@ def create_email_subject(symbol1, symbol2=None):
 
 
 def create_charts(tickers_data, symbol1, symbol2=None):
+    folder = 'static'
     if symbol2 is None:
         job_type = "single"
         filename_1 = symbol1 + "_long_period" + ".png"
-        filename_1 = os.path.join('static', filename_1)
+        filename_1 = os.path.join(folder, filename_1)
         filename_2 = symbol1 + "_short_period" + ".png"
-        filename_2 = os.path.join('static', filename_2)
+        filename_2 = os.path.join(folder, filename_2)
         data = tickers_data[symbol1]
     else:
         job_type = "relative"
         filename_1 = symbol1 + "_" + symbol2 + ".png"
-        filename_1 = os.path.join('static', filename_1)
+        filename_1 = os.path.join(folder, filename_1)
         filename_2 = None
         data = tickers_data[symbol1] / tickers_data[symbol2]
     my_plots_dpi = 100  # number determined by trial and error

@@ -13,6 +13,4 @@ class PortfolioRowChartsView(DetailView):
         context = super().get_context_data(**kwargs)
         row = PortfolioRow.objects.get(pk=self.kwargs["pk"])
         context["row"] = row
-        # context["filename_1"] = row.filename_1
-        # context["filename_2"] = row.filename_2
         return context
