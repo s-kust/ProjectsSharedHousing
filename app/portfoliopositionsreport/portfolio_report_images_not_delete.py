@@ -46,7 +46,7 @@ def create_email_subject(symbol1, symbol2=None):
 
 
 def create_charts(tickers_data, symbol1, symbol2=None):
-    folder = 'static'
+    folder = 'media'
     if symbol2 is None:
         job_type = "single"
         filename_1 = symbol1 + "_long_period" + ".png"
@@ -318,7 +318,7 @@ def process_full():
     config = configparser.ConfigParser()
     config.read("config.ini")
     data_store = DataStore(config)
-    png_files = [file for file in glob.glob("static/*.png")]
+    png_files = [file for file in glob.glob("media/*.png")]
     for png_file in png_files:
         os.remove(png_file)
     if not os.path.exists('images'):

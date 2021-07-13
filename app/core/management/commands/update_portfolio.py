@@ -19,7 +19,8 @@ class Command(BaseCommand):
         data_store = portfolio_report.process_full()
         portfolio_rows = data_store.all_ideas
         # portfolio_rows = portfolio_report.create_portfolio_df_from_worksheets()
-        base_path = '/static/'
+        # base_path = '/media/'
+        base_path = ''
         assert isinstance(portfolio_rows, pd.DataFrame)
         portfolio_today = Portfolio.objects.create()
         for _, row in portfolio_rows.iterrows():

@@ -5,8 +5,8 @@ services:
     restart: always
     build:
       context: .
-    ports:
-      - "8000:8000"
+    expose:
+      - 8000
     volumes:
       - ./app:/app
     command: >
@@ -14,7 +14,7 @@ services:
              python3 manage.py makemigrations &&
              python3 manage.py migrate &&             
              python3 db_init.py &&
-             python3 manage.py runserver 0.0.0.0:8000"
+             gunicorn --bind 0.0.0.0:8000 root_app.wsgi:application"
  
     env_file:
       - ./.env
@@ -38,7 +38,7 @@ services:
       # - "6900-7000:6900-7000"
     build:
       context: .
-      dockerfile: Dockerfile_b
+      dockerfile: Dockerfile_celery
     command: celery -A root_app worker -l info --logfile=celery_log.log
     volumes:
       - ./app:/app
@@ -54,7 +54,7 @@ services:
       # - "6900-7000:6900-7000"
     build:
       context: .
-      dockerfile: Dockerfile_b
+      dockerfile: Dockerfile_celery
     command: celery -A root_app beat -l info --logfile=celery_log.log
     volumes:
       - ./app:/app
@@ -64,5 +64,12 @@ services:
       - db
       - redis
       - app
-# volumes:
-  # pgdata:
+  nginx:
+    build: ./build_nginx
+    volumes:
+      - ./app/staticfiles:/app/staticfiles
+      - ./app/media:/app/media
+    ports:
+      - "80:80"
+    depends_on:
+      - app

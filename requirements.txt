@@ -1,7 +1,6 @@
 django
 celery
 redis
-psycopg2
 asgiref
 django-appconf
 django-cors-headers

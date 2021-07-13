@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = os.environ.get('DEBUG', False)
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    # 'whitenoise.runserver_nostatic',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     
     # 3rd party
@@ -56,7 +56,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -84,7 +84,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'root_app.wsgi.application'
+# WSGI_APPLICATION = 'root_app.wsgi.application'
 
 
 # Database
@@ -141,14 +141,18 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles/")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "media"),
 ]
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# MEDIA_URL = '/media/'
-MEDIA_URL = ''
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# MEDIA_URL = ''
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
