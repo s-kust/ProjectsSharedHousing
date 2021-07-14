@@ -11,7 +11,7 @@ __pycache__/
 __pycache__/
 local_settings.py
 db.sqlite3
-media
+
 
 # Django stuff:
 *.log
@@ -24,9 +24,12 @@ celerybeat-schedule
 .env
 
 ### Custom ###
-data/
+data/*
+!data/.gitkeep 
+app/media/*
+!app/media/.gitkeep 
 app/celery_test.txt
-.vscode
+.vscode/
 env
 client_secret.json
 config.ini
