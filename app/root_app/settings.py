@@ -163,14 +163,15 @@ CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 
 CELERY_BEAT_SCHEDULE = {
-    "sample_task": {
-        "task": "root_app.tasks.sample_task",
-        "schedule": crontab(minute="*/1"),
-    },
-    
+    # "sample_task": {
+        # "task": "root_app.tasks.sample_task",
+        # "schedule": crontab(minute="*/1"),
+    # },
+       
+    # 10 minutes after trading day close
     "send_email_report": {
-        "task": "root_app.tasks.send_email_report",
-        "schedule": crontab(minute=20, hour=7, day_of_week='mon,tue,wed,thu,fri,sat,sun'),
+        "task": "root_app.tasks.update_portfolio_and_send_reports",
+        "schedule": crontab(minute=10, hour=20, day_of_week='mon,tue,wed,thu,fri'),
     },
 }
 

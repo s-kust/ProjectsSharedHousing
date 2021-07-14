@@ -12,6 +12,6 @@ def sample_task():
     return "sample_task success"
 
 @shared_task
-def send_email_report():
-    call_command("email_report", )
-    logger.info("The send_email_report task just ran.")
+def update_portfolio_and_send_reports():
+    call_command("update_portfolio", )
+    logger.info("The update_portfolio_and_send_reports task just ran.")

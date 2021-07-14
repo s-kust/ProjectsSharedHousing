@@ -8,5 +8,5 @@ RUN apk add --update --no-cache postgresql-client jpeg-dev \
 	&& pip install -r /requirements.txt \
 	&& apk del .tmp-build-deps
 RUN mkdir /app 
-COPY ../app /app
+COPY ./app /app
 WORKDIR /app

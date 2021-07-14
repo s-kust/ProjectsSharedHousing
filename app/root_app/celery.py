@@ -20,11 +20,11 @@ logger = get_task_logger(__name__)
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     print('Inside setup_periodic_tasks')
-    results = []
-    for i in range(3):
-        async_result = test_task.delay(i)
-        results.append(async_result)
-        print('Execute task', i, '-', async_result.status)
+    # results = []
+    # for i in range(3):
+        # async_result = test_task.delay(i)
+        # results.append(async_result)
+        # print('Execute task', i, '-', async_result.status)
     
     # time.sleep(4)
     
@@ -44,9 +44,9 @@ def setup_periodic_tasks(sender, **kwargs):
     # print('Workers', app.control.inspect())
     # for elem in app.control.inspect():
         # print(elem)
-    for elem in results:
-        print(elem.status)
-        # print(elem.get())
+    
+    # for elem in results:
+        # print(elem.status)        
         
     # Calls test('hello') every 10 seconds.
     # sender.add_periodic_task(1.0, test.s('hello'), name='hello', expires=5)
