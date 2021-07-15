@@ -34,4 +34,6 @@ env
 client_secret.json
 config.ini
 app/static/
+!app/static/.gitkeep
 app/staticfiles/
+!app/staticfiles/.gitkeep

@@ -5,6 +5,7 @@ services:
     restart: always
     build:
       context: .
+      dockerfile: Dockerfile_django_full
     expose:
       - 8000
     volumes:
@@ -38,7 +39,7 @@ services:
       # - "6900-7000:6900-7000"
     build:
       context: .
-      dockerfile: Dockerfile_celery
+      dockerfile: Dockerfile_celery_min
     command: celery -A root_app worker -l info --logfile=celery_log.log
     volumes:
       - ./app:/app
@@ -54,7 +55,7 @@ services:
       # - "6900-7000:6900-7000"
     build:
       context: .
-      dockerfile: Dockerfile_celery
+      dockerfile: Dockerfile_celery_min
     command: celery -A root_app beat -l info --logfile=celery_log.log
     volumes:
       - ./app:/app

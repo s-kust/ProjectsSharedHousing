@@ -141,7 +141,7 @@ def create_portfolio_df_from_worksheets():
         "https://spreadsheets.google.com/feeds",
         "https://www.googleapis.com/auth/drive",
     ]
-    credentials = ServiceAccountCredentials.from_json_keyfile_name("./client_secret.json", scope)
+    credentials = ServiceAccountCredentials.from_json_keyfile_name("/app/portfoliopositionsreport/client_secret.json", scope)
     client = gspread.authorize(credentials)
     # Make sure you use the right filename here.
     sheet = client.open("Portfolio")
@@ -316,7 +316,10 @@ async def process_row(row, data_store_object):
 
 def process_full():
     config = configparser.ConfigParser()
-    config.read("config.ini")
+    config_file_path = '/app/portfoliopositionsreport/config.ini'
+    s = open(config_file_path, mode='r', encoding='utf-8-sig').read()
+    open(config_file_path, mode='w', encoding='utf-8').write(s)
+    config.read(config_file_path)
     data_store = DataStore(config)
     png_files = [file for file in glob.glob("media/*.png")]
     for png_file in png_files:

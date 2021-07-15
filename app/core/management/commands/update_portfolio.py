@@ -69,6 +69,5 @@ class Command(BaseCommand):
                     shutil.rmtree(file_path)
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
-        call_command('collectstatic')
         self.stdout.write("update_portfolio end")
         self.stdout.write()
