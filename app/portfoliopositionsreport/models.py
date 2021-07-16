@@ -1,9 +1,9 @@
 from django.db import models
+from core.models import CreationModificationDateBase
 
 ROW_TYPE_CHOICES = [("Stocks_ETFs", "Stocks or ETFs"), ("Forex", "Forex")]
 
-class Portfolio(models.Model):
-    last_update_date = models.DateField(auto_now_add=True)
+class Portfolio(CreationModificationDateBase):
 
     def save(self, *args, **kwargs):
         Portfolio.objects.all().delete()

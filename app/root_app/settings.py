@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['localhost', '161.35.29.76']
+ALLOWED_HOSTS = ['localhost', '161.35.29.76', '127.0.0.1']
 
 
 # Application definition
@@ -133,7 +133,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -145,14 +144,9 @@ STATICFILES_DIRS = [
 ]
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
-
 MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# MEDIA_URL = ''
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
