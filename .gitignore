@@ -29,6 +29,7 @@ data/*
 app/media/*
 !app/media/.gitkeep 
 app/celery_test.txt
+app/config.json
 .vscode/
 env
 client_secret.json
