@@ -12,19 +12,32 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import json
 from celery.schedules import crontab
 import root_app.tasks
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+with open(os.path.join(BASE_DIR, 'config.json'), 'r') as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting):
+    """Get the secret variable or return explicit exception."""
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = f'Set the {setting} in the config.json file'
+        raise ImproperlyConfigured(error_msg)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
-# SECRET_KEY = 'django-insecure-zongw$061ws-y__f^&k67la)g5u1h#gc_t58$7ie%u6pl$ok-4'
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = get_secret('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = os.environ.get('DEBUG', False)
@@ -86,17 +99,16 @@ TEMPLATES = [
 
 # WSGI_APPLICATION = 'root_app.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
+        'HOST': get_secret('DB_HOST'),
+        'NAME': get_secret('DB_NAME'),
+        'USER': get_secret('DB_USER'),
+        'PASSWORD': get_secret('DB_PASS'),
     }
 }
 
@@ -172,3 +184,12 @@ CELERY_BEAT_SCHEDULE = {
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "noreply@email.com"
 ADMINS = [("testuser", "test.user@email.com"), ]
+
+SMTP_STR_FROM = get_secret('SMTP_str_from')
+SMTP_STR_TO = get_secret('SMTP_str_to')
+SMTP_HOST = get_secret('SMTP_host')
+SMTP_PORT = get_secret('SMTP_port')
+SMTP_LOGIN = get_secret('SMTP_login')
+SMTP_PASSWORD = get_secret('SMTP_password')
+ALPHA_VANTAGE_API_KEY = get_secret('ALPHA_VANTAGE_api_key')
+

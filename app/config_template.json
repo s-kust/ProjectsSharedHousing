@@ -1,0 +1,27 @@
+{
+	"DB_HOST": "db",
+	"DB_NAME": "app",
+	"DB_USER": "postgres",
+	"DB_PASS": "insert_your_db_password_here",
+	"CELERY_RDB_HOST": "0.0.0.0",
+	"SECRET_KEY": "insert_your_value_here",
+	
+	"type": "service_account",
+	"project_id": "insert_your_project_id_here",
+	"private_key_id": "0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxe",
+	"private_key": "-----BEGIN PRIVATE KEY-----\n-long-sequence-of-symbols-=\n-----END PRIVATE KEY-----\n",
+	"client_email": "something@something-else.iam.gserviceaccount.com",
+	"client_id": "1234567890",
+	"auth_uri": "https://accounts.google.com/o/oauth2/auth",
+	"token_uri": "https://oauth2.googleapis.com/token",
+	"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+	"client_x509_cert_url": "insert_your_from_google_here",
+	
+	"SMTP_str_from": "my_mail@response_to_me.com",
+	"SMTP_str_to": "my_mail@gmail.com",
+	"SMTP_host": "smtp1.your.server.here",
+	"SMTP_port": "465",
+	"SMTP_login": "my_mail@response_to_me.com",
+	"SMTP_password": "insert_your_SMTP_server_password_here",
+	"ALPHA_VANTAGE_api_key": "ABCD1234EFGH"
+}

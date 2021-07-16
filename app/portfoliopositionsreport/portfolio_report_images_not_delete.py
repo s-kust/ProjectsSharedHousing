@@ -13,12 +13,14 @@ import numpy as np
 import mplfinance as mpf
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from django.conf import settings
 
 
 class DataStore:
-    def __init__(self, config_input):
-        self.config = config_input
-        self.api_key = self.config["Alpha_vantage"]["api_key"]
+    def __init__(self):
+        # self.config = config_input
+        # self.api_key = self.config["Alpha_vantage"]["api_key"]
+        self.api_key = settings.ALPHA_VANTAGE_API_KEY
         self.start_date = datetime.datetime.now() - datetime.timedelta(days=1.5 * 365)
         self.all_ideas = create_portfolio_df_from_worksheets()
         self.tickers_failed_import = []
@@ -97,8 +99,10 @@ def _add_image_to_msg_root(message_root, image_path, header, subject_text):
 def create_data_for_email(data_store_object, filename_1, filename_2=None):
     msg_root = MIMEMultipart("related")
     msg_root["Subject"] = data_store_object.subject
-    msg_root["From"] = data_store_object.config["SMTP_data"]["str_from"]
-    msg_root["To"] = data_store_object.config["SMTP_data"]["str_to"]
+    # msg_root["From"] = data_store_object.config["SMTP_data"]["str_from"]
+    # msg_root["To"] = data_store_object.config["SMTP_data"]["str_to"]
+    msg_root["From"] = settings.SMTP_STR_FROM
+    msg_root["To"] = settings.SMTP_STR_TO
     msg_root.preamble = "This is a multi-part message in MIME format, with pictures."
 
     # Encapsulate the plain and HTML versions of the message body in an
@@ -122,15 +126,15 @@ def create_data_for_email(data_store_object, filename_1, filename_2=None):
         msg_text = MIMEText(
             '<img src="cid:image1"><br><img src="cid:image2"><br>{0}<br>Bye!'.format(data_store_object.note), "html")
     msg_alternative.attach(msg_text)
-    send_email_with_data(data_store_object.config, msg_root)
+    send_email_with_data(msg_root)
     return msg_root
 
 
-def send_email_with_data(config_input, msg_data_input):
-    smtp = smtplib.SMTP_SSL(config_input["SMTP_data"]["host"], config_input["SMTP_data"]["port"])
-    smtp.connect(config_input["SMTP_data"]["host"])
-    smtp.login(config_input["SMTP_data"]["login"], config_input["SMTP_data"]["password"])
-    smtp.sendmail(config_input["SMTP_data"]["str_from"], config_input["SMTP_data"]["str_to"],
+def send_email_with_data(msg_data_input):             
+    smtp = smtplib.SMTP_SSL(settings.SMTP_HOST, int(settings.SMTP_PORT))
+    smtp.connect(settings.SMTP_HOST)
+    smtp.login(settings.SMTP_LOGIN, settings.SMTP_PASSWORD)
+    smtp.sendmail(settings.SMTP_STR_FROM, settings.SMTP_STR_TO,
                   msg_data_input.as_string())
     smtp.quit()
 
@@ -141,7 +145,7 @@ def create_portfolio_df_from_worksheets():
         "https://spreadsheets.google.com/feeds",
         "https://www.googleapis.com/auth/drive",
     ]
-    credentials = ServiceAccountCredentials.from_json_keyfile_name("/app/portfoliopositionsreport/client_secret.json", scope)
+    credentials = ServiceAccountCredentials.from_json_keyfile_name("/app/config.json", scope)
     client = gspread.authorize(credentials)
     # Make sure you use the right filename here.
     sheet = client.open("Portfolio")
@@ -315,12 +319,7 @@ async def process_row(row, data_store_object):
 
 
 def process_full():
-    config = configparser.ConfigParser()
-    config_file_path = '/app/portfoliopositionsreport/config.ini'
-    s = open(config_file_path, mode='r', encoding='utf-8-sig').read()
-    open(config_file_path, mode='w', encoding='utf-8').write(s)
-    config.read(config_file_path)
-    data_store = DataStore(config)
+    data_store = DataStore()
     png_files = [file for file in glob.glob("/app/media/*.png")]
     for png_file in png_files:
         os.remove(png_file)

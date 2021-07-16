@@ -17,15 +17,15 @@ services:
              python3 db_init.py &&
              gunicorn --bind 0.0.0.0:8000 root_app.wsgi:application"
  
-    env_file:
-      - ./.env
+    # env_file:
+      # - ./.env
     depends_on:
       - db 
   db:
     restart: always
     image: postgres:10-alpine
     env_file:
-      - ./.env
+      - ./db_config.ini
     volumes:
         - ./data/db:/var/lib/postgresql/data
   redis:
@@ -40,8 +40,8 @@ services:
     command: celery -A root_app worker -l info --logfile=celery_log.log
     volumes:
       - ./app:/app
-    env_file:
-      - ./.env
+    # env_file:
+      # - ./.env
     depends_on:
       - db
       - redis
@@ -54,8 +54,8 @@ services:
     command: celery -A root_app beat -l info --logfile=celery_log.log
     volumes:
       - ./app:/app
-    env_file:
-      - ./.env
+    # env_file:
+      # - ./.env
     depends_on:
       - db
       - redis

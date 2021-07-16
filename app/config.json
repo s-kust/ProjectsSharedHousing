@@ -1,0 +1,27 @@
+{
+	"DB_HOST": "db",
+	"DB_NAME": "app",
+	"DB_USER": "postgres",
+	"DB_PASS": "xrqu1ebi7rgcqqf0ni",
+	"CELERY_RDB_HOST": "0.0.0.0",
+	"SECRET_KEY": "f236=_&t6a)xrqu1eb!i7^r&gcqqf0ni)z%*63^g%rvg8rlu=*!kf73",
+	
+	"type": "service_account",
+	"project_id": "portfolio-263710",
+	"private_key_id": "094100b825a55f6a130d3a2c6b748d3241f3c80e",
+	"private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCxegoK9EMHFSGq\nvryiwKAR/gwhhwd4qQ/bezKpsipfDfMkp+/Y6iScb6bvlQEtcZBfSU41fKacEBvH\nWTCXuP18F8q8hDZw/YLTqELAXu4dXEZJNoKoaBawVl28hk47RV2/HPUtGHxY3PM0\n1kFMUAWHvXppEWlK/V2EJukLrtXHw1pQwUKHL3MgKYWbQyVgYW7vaBaHqxZPWJD+\n33mvsCTAmvnFSmT3I0g+PE1yB6XHUJzdt/uD+OoapRKb6a4bdtZPUA4ypgzqmFZk\n4SdxHgiyMMwyweUZA434/QN1JS+lCdD+e+5/75sozQxq/on2VZ/gzfmnAeexI8Gj\n8/zzYL4JAgMBAAECggEAKsdk5lEMWwev7s09AOn3a37WA7rdhSsTJG9kvdyxM+pT\n4lEMkjeWDZMoJPXAq+iEyUMNM/1Q16tWVs3b1aaEi0Xc22XvDXs97rDPLjlzoeYd\nFwappdg5J9YZkBi7gLPureNYAb+2MWFIykKeyLs9KgP1HqBQxf+ea/1JDUTeSOEZ\n3H02WSLXgFzeKdCnqzgKYMg0eRa50QYz6zgCkx/9tJQah8bYdoGz3Wcq8hQBW8Ah\n+4ORQFRMj9Bxbe5otA3OXrAiCD2T5gPLrqWOgOqCQvf0EOilxyj1X4yWd+6DJkJJ\n6/T1H0uahBtNNpbdNtWRLC0ohueUupkZifLBozBhpQKBgQDgrVsAGZtocr7lqLZo\nfI9avq5KLbNLVnnZX1katEruZZIpbKPyV7EQBvNGQepCRJEQYtXk9duWN2qIMTi8\nyRBV44WgQoRdERNWaU4fs8O4cfw7YaXI9HSb8qAdyVs8ZBA/75Z1IAg0byrcWQ0q\n7RoyjkT+2t0M7I9uP+GQJTQLjwKBgQDKOB38L/H90rManOPNgLIUToCSddJ5Do2D\nC5nrF/DC9mJt2bzryVXBq5OA3zN0JEL24CSh0+teGGYx1LHXAz5zYjzMBY/NQNXS\nfIS8BPcVaq0/kGvxn1Yai/61ufgWFVee/bRFyb9HfEQPd1cQin3ajWeZ1phG32Lh\nVcYacwiw5wKBgCheHU6MS0bd7vyWboehcaRNREVhpqgvll7+6aSJpjjlGPjGY0KE\njPSjOwxxhWR4q1O1Xlbv8Y8wz7w+k8Ifoga8hWLA8MVD7ySEcRvzEYRPPpFwvve3\nLEhktG4FopXcKKtEIdVTdwXsv1etzFbdGOricvUTX8oVqsOVSLK8bHhzAoGBALtK\njGMVmQDo1B+y7b5ZExaBus1ruNuMYf7ckNtQGhrIjlOF1ldf60BsBDrY/1Pzfd4f\nrW4A1D8bRBOlFm25QG8nrn2cLRsCkMfZsipeQuagHgQAZCmu1NXTkb6IlsEFVVkZ\nS41TlQjFjFfyxT25t2TjkO/H9NO3dGKVydyXbJZDAoGAALCVOR4IDtHsqyj3woTM\nzY+iCSrMGWIVkY9fDM5mI1TM0E4pTx18l3y2RvH1ppVkW++XeX9gl3CJQTyiMDdX\nNhujpimBw1JY8cWDr2dn095uPzCf1TSuu9cxPJMP855ApCOQCMABYUvIR280V8PI\nvvUTTeNdMtF+0pPGKHn51SE=\n-----END PRIVATE KEY-----\n",
+	"client_email": "read-portfolio-items@portfolio-263710.iam.gserviceaccount.com",
+	"client_id": "117257605657187762715",
+	"auth_uri": "https://accounts.google.com/o/oauth2/auth",
+	"token_uri": "https://oauth2.googleapis.com/token",
+	"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+	"client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/read-portfolio-items%40portfolio-263710.iam.gserviceaccount.com",
+	
+	"SMTP_str_from": "admin@endocrin-patient.com",
+	"SMTP_str_to": "send2kust@gmail.com",
+	"SMTP_host": "smtp1.mchost.ru",
+	"SMTP_port": "465",
+	"SMTP_login": "admin@endocrin-patient.com",
+	"SMTP_password": "kUst2BrowsePost",
+	"ALPHA_VANTAGE_api_key": "LSXTJWXIRB0L0FYT"
+}
