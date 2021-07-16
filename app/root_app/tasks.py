@@ -15,3 +15,4 @@ def sample_task():
 def update_portfolio_and_send_reports():
     call_command("update_portfolio", )
     logger.info("The update_portfolio_and_send_reports task just ran.")
+    return "update_portfolio_and_send_reports task success"

@@ -58,4 +58,3 @@ class Command(BaseCommand):
         print('date_last_update', Portfolio.objects.all()[0].modified.strftime("%d-%B-%Y"))
         self.stdout.write("update_portfolio end")
         self.stdout.write()
-        return 0
