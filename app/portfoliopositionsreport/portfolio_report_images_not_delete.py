@@ -5,7 +5,6 @@ from email.mime.image import MIMEImage
 # from IPython.core.debugger import set_trace
 import os
 import glob
-import configparser
 import asyncio
 import datetime
 import pandas as pd
@@ -29,13 +28,13 @@ class DataStore:
         self.last_api_call_time = self.subject = self.note = None
 
 
-def atr(df, n=14):  # average true range
-    data = df.copy()
+def atr(ohlc_data, days_number=14):  # average true range
+    data = ohlc_data.copy()
     data["tr0"] = abs(data["High"] - data["Low"])
     data["tr1"] = abs(data["High"] - data["Close"].shift())
     data["tr2"] = abs(data["Low"] - data["Close"].shift())
-    tr = data[["tr0", "tr1", "tr2"]].max(axis=1)
-    atr_series = tr.ewm(alpha=1 / n, min_periods=n).mean()
+    true_range = data[["tr0", "tr1", "tr2"]].max(axis=1)
+    atr_series = true_range.ewm(alpha=1 / days_number, min_periods=days_number).mean()
     return atr_series
 
 
@@ -83,13 +82,13 @@ def create_charts(tickers_data, symbol1, symbol2=None):
 def _add_image_to_msg_root(message_root, image_path, header, subject_text):
     image_add_success_indicator = False
     try:
-        fp = open(image_path, "rb")
-        msg_image = MIMEImage(fp.read())
+        file_bytes = open(image_path, "rb")
+        msg_image = MIMEImage(file_bytes.read())
         msg_image.add_header("Content-ID", header)
         message_root.attach(msg_image)
-        fp.close()
-    except Exception as e:
-        print(e)
+        file_bytes.close()
+    except Exception as exception_msg:
+        print(exception_msg)
         print("Problem with file", subject_text)
     else:
         image_add_success_indicator = True
@@ -195,8 +194,8 @@ async def _import_stock_ticker(ticker_val, data_store_object, failed_import_tick
         data_url = url_backbone + data_store_object.api_key + symbol_backbone + symbol
         data = await _data_import_and_preprocess(data_url, data_store_object)
         data.rename(columns={'volume': 'Volume'}, inplace=True)
-    except Exception as e:
-        print(e)
+    except Exception as exception_msg:
+        print(exception_msg)
         print("Problem in _import_stock_ticker_alpha_vantge -", ticker_val)
         failed_import_tickers.append(ticker_val)
     else:
@@ -236,8 +235,8 @@ async def _import_tickers_in_row(row, data_store_object):
         try:
             imported = await _import_forex_row_alpha_vantge(
                 row['Ticker1'], row['Ticker2'], data_store_object)
-        except Exception as e:
-            print(e)
+        except Exception as exception_msg:
+            print(exception_msg)
             data_store_object.tickers_failed_import.append(combined_ticker_fx)
         else:
             imported['Volume'] = 0.0

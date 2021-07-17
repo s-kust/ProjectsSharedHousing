@@ -1,9 +1,8 @@
 from django.test import TestCase, Client
-from django.urls import reverse, resolve
-from portfoliopositionsreport.models import Portfolio, PortfolioRow
+from django.urls import reverse
 from model_bakery import baker
 
-def createTestData():
+def create_test_data():
     portfolio_list = baker.make('portfoliopositionsreport.Portfolio', _quantity=1)
     row_list = baker.make('portfoliopositionsreport.PortfolioRow', portfolio=portfolio_list[0], _quantity=1)
     return portfolio_list, row_list
@@ -11,12 +10,12 @@ def createTestData():
 class AllPortfolioRowsViewTests(TestCase):
     
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
         super().setUpClass()
-        self.portfolio_list, self.portfolio_row_list = createTestData()
-        self.url = reverse('portfolio_root')
-        self.client = Client()
-        self.response = self.client.get(self.url)        
+        cls.portfolio_list, cls.portfolio_row_list = create_test_data()
+        cls.url = reverse('portfolio_root')
+        cls.client = Client()
+        cls.response = cls.client.get(cls.url)        
 
     def test_all_portfolio_rows_status_code(self):
         self.assertEqual(self.response.status_code, 200)
@@ -38,18 +37,18 @@ class AllPortfolioRowsViewTests(TestCase):
         self.assertEqual(self.response.context['modified_date'], self.portfolio_list[0].modified.date())
         
     @classmethod
-    def tearDownClass(self):
+    def tearDownClass(cls):
         super().tearDownClass()
 
 class PortfolioRowChartsViewTests(TestCase):
     
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
         super().setUpClass()
-        self.portfolio_list, self.portfolio_row_list = createTestData()
-        self.url = reverse('row_charts', args=[self.portfolio_row_list[0].pk])
-        self.client = Client()
-        self.response = self.client.get(self.url)
+        cls.portfolio_list, cls.portfolio_row_list = create_test_data()
+        cls.url = reverse('row_charts', args=[cls.portfolio_row_list[0].pk])
+        cls.client = Client()
+        cls.response = cls.client.get(cls.url)
 
     def test_portfolio_row_charts_status_code(self):
         self.assertEqual(self.response.status_code, 200)
@@ -71,5 +70,5 @@ class PortfolioRowChartsViewTests(TestCase):
         self.assertEqual(self.response.context['row'].pk, self.portfolio_row_list[0].pk)
         
     @classmethod
-    def tearDownClass(self):
+    def tearDownClass(cls):
         super().tearDownClass()

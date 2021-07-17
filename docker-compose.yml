@@ -15,8 +15,6 @@ services:
              python3 manage.py wait_for_db &&             
              gunicorn --bind 0.0.0.0:8000 root_app.wsgi:application"
  
-    # env_file:
-      # - ./.env
     depends_on:
       - db 
   db:
@@ -38,8 +36,6 @@ services:
     command: celery -A root_app worker -l info --logfile=celery_log.log
     volumes:
       - ./app:/app
-    # env_file:
-      # - ./.env
     depends_on:
       - db
       - redis
@@ -52,8 +48,6 @@ services:
     command: celery -A root_app beat -l info --logfile=celery_log.log
     volumes:
       - ./app:/app
-    # env_file:
-      # - ./.env
     depends_on:
       - db
       - redis

@@ -1,31 +1,32 @@
-from django.test import TestCase
-from schemas.models import DataSchemas, SchemaColumn, IntegerColumn, FullNameColumn, JobColumn, CompanyColumn, PhoneColumn
-from model_bakery import baker
 import collections
+from django.test import TestCase
 from django.core.exceptions import ValidationError
+from schemas.models import SchemaColumn, PhoneColumn
+from model_bakery import baker
 
-items_number = 2
-column_classes_count = 5
+
+ITEMS_NUMBER = 2
+COLUMN_CLASSES_COUNT = 5
 subclasses = [str(subClass).split('.')[-1][:-2].lower() for subClass in SchemaColumn.__subclasses__()]
 
-def createTestData():
-    schemas = baker.make('schemas.DataSchemas', _quantity=items_number)
-    int_cols = baker.make('schemas.IntegerColumn', schema=schemas[0], _quantity=items_number)
-    fullname_cols = baker.make('schemas.FullNameColumn', schema=schemas[0], _quantity=items_number)
-    job_cols = baker.make('schemas.JobColumn', schema=schemas[0], _quantity=items_number)
-    company_cols = baker.make('schemas.CompanyColumn', schema=schemas[0], _quantity=items_number)
-    phone_cols = baker.make('schemas.PhoneColumn', schema=schemas[0], _quantity=items_number)
+def create_test_data():
+    schemas = baker.make('schemas.DataSchemas', _quantity=ITEMS_NUMBER)
+    int_cols = baker.make('schemas.IntegerColumn', schema=schemas[0], _quantity=ITEMS_NUMBER)
+    fullname_cols = baker.make('schemas.FullNameColumn', schema=schemas[0], _quantity=ITEMS_NUMBER)
+    job_cols = baker.make('schemas.JobColumn', schema=schemas[0], _quantity=ITEMS_NUMBER)
+    company_cols = baker.make('schemas.CompanyColumn', schema=schemas[0], _quantity=ITEMS_NUMBER)
+    phone_cols = baker.make('schemas.PhoneColumn', schema=schemas[0], _quantity=ITEMS_NUMBER)
     return(schemas, int_cols, fullname_cols, job_cols, company_cols, phone_cols)  
     
 class ModelsTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.schemas, cls.int_cols, cls.fullname_cols, cls.job_cols, cls.company_cols, cls.phone_cols = createTestData()
+        cls.schemas, cls.int_cols, cls.fullname_cols, cls.job_cols, cls.company_cols, cls.phone_cols = create_test_data()
         
-    def test_schemas_general_Column_relation(self):
-        self.assertEqual(self.schemas[0].schemacolumn_set.count(), items_number * column_classes_count)
+    def test_schemas_general_column_relation(self):
+        self.assertEqual(self.schemas[0].schemacolumn_set.count(), ITEMS_NUMBER * COLUMN_CLASSES_COUNT)
         
-    def test_schemas_specific_Column_relation(self):
+    def test_schemas_specific_column_relation(self):
         subclasses_found = []
         for column in self.schemas[0].schemacolumn_set.all():
             for subclass in subclasses:
@@ -37,8 +38,8 @@ class ModelsTestCase(TestCase):
         # print(len(subclasses_occurrences))
         # print(subclasses_occurrences)
         for element in subclasses_occurrences:
-            self.assertEqual(subclasses_occurrences[element], items_number)
-        self.assertEqual(len(subclasses_occurrences), column_classes_count)    
+            self.assertEqual(subclasses_occurrences[element], ITEMS_NUMBER)
+        self.assertEqual(len(subclasses_occurrences), COLUMN_CLASSES_COUNT)    
        
     def test_integer_column_default_values(self):
         self.assertEqual(self.int_cols[1].range_low, -20)
@@ -54,8 +55,8 @@ class ModelsTestCase(TestCase):
         # print(phone_item.phone_number)
         try:
             phone_item.full_clean()
-        except ValidationError as e:
-            print(e)
+        except ValidationError as exception_msg:
+            print(exception_msg)
         else:
             phone_item.save()
         self.assertEqual(PhoneColumn.objects.filter(phone_number='+421960321654').count(), 1)

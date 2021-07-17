@@ -1,8 +1,6 @@
 import time
 from django.db import connection
-from django.db.utils import OperationalError
 from django.core.management import BaseCommand
-import os
 
 class Command(BaseCommand):
     """Django command to pause execution until db is available"""
@@ -12,8 +10,8 @@ class Command(BaseCommand):
         while True:
             try:
                 connection.ensure_connection()
-            except Exception as e:
-                print(e)
+            except Exception as expression_msg:
+                print(expression_msg)
                 self.stdout.write("Connection to database cannot be established.")
                 time.sleep(1)
             else:

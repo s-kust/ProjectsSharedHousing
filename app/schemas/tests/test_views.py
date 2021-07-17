@@ -1,30 +1,29 @@
 from django.test import TestCase, Client
 from django.urls import reverse, resolve
-from schemas.views import AllSchemasView, SchemaView
-from schemas.models import DataSchemas, SchemaColumn, IntegerColumn, FullNameColumn, JobColumn, CompanyColumn, PhoneColumn
+from schemas.models import SchemaColumn
 from model_bakery import baker
 
-items_number = 2
-column_classes_count = 5
+ITEMS_NUMBER = 2
+COLUMN_CLASSES_COUNT = 5
 subclasses = [str(subClass).split('.')[-1][:-2].lower() for subClass in SchemaColumn.__subclasses__()]
 
-def createTestData():
-    schemas = baker.make('schemas.DataSchemas', _quantity=items_number)
-    int_cols = baker.make('schemas.IntegerColumn', schema=schemas[0], _quantity=items_number)
-    fullname_cols = baker.make('schemas.FullNameColumn', schema=schemas[0], _quantity=items_number)
-    job_cols = baker.make('schemas.JobColumn', schema=schemas[0], _quantity=items_number)
-    company_cols = baker.make('schemas.CompanyColumn', schema=schemas[0], _quantity=items_number)
-    phone_cols = baker.make('schemas.PhoneColumn', schema=schemas[0], _quantity=items_number)
+def create_test_data():
+    schemas = baker.make('schemas.DataSchemas', _quantity=ITEMS_NUMBER)
+    int_cols = baker.make('schemas.IntegerColumn', schema=schemas[0], _quantity=ITEMS_NUMBER)
+    fullname_cols = baker.make('schemas.FullNameColumn', schema=schemas[0], _quantity=ITEMS_NUMBER)
+    job_cols = baker.make('schemas.JobColumn', schema=schemas[0], _quantity=ITEMS_NUMBER)
+    company_cols = baker.make('schemas.CompanyColumn', schema=schemas[0], _quantity=ITEMS_NUMBER)
+    phone_cols = baker.make('schemas.PhoneColumn', schema=schemas[0], _quantity=ITEMS_NUMBER)
     return(schemas, int_cols, fullname_cols, job_cols, company_cols, phone_cols)  
     
 class AllSchemasViewTests(TestCase):
     
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
         super().setUpClass()
-        self.url = reverse('all_schemas')
-        self.client = Client()
-        self.response = self.client.get(self.url)
+        cls.url = reverse('all_schemas')
+        cls.client = Client()
+        cls.response = cls.client.get(cls.url)
 
     def test_all_schemas_status_code(self):
         self.assertEqual(self.response.status_code, 200)
@@ -47,18 +46,18 @@ class AllSchemasViewTests(TestCase):
         self.assertEqual(view.func.__name__, 'ProjectsListView')
         
     @classmethod
-    def tearDownClass(self):
+    def tearDownClass(cls):
         super().tearDownClass()
         
 class DeleteSchemaViewTests(TestCase):
     
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
         super().setUpClass()
-        self.schemas, self.int_cols, self.fullname_cols, self.job_cols, self.company_cols, self.phone_cols = createTestData()
-        self.url = reverse('delete_schema', args=[self.schemas[0].pk])
-        self.client = Client()
-        self.response = self.client.post(self.url, follow = True)
+        cls.schemas, cls.int_cols, cls.fullname_cols, cls.job_cols, cls.company_cols, cls.phone_cols = create_test_data()
+        cls.url = reverse('delete_schema', args=[cls.schemas[0].pk])
+        cls.client = Client()
+        cls.response = cls.client.post(cls.url, follow = True)
         
     def test_delete_schema_status_code(self):
         self.assertEqual(self.response.status_code, 200)
@@ -85,18 +84,18 @@ class DeleteSchemaViewTests(TestCase):
         self.assertEqual(view.func.__name__, 'delete_schema')
         
     @classmethod
-    def tearDownClass(self):
+    def tearDownClass(cls):
         super().tearDownClass()        
         
 class SchemaViewTests(TestCase):
     
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
         super().setUpClass()
-        self.schemas, self.int_cols, self.fullname_cols, self.job_cols, self.company_cols, self.phone_cols = createTestData()
-        self.url = reverse('schema_create_update', args=[self.schemas[0].pk])
-        self.client = Client()
-        self.response = self.client.post(self.url)        
+        cls.schemas, cls.int_cols, cls.fullname_cols, cls.job_cols, cls.company_cols, cls.phone_cols = create_test_data()
+        cls.url = reverse('schema_create_update', args=[cls.schemas[0].pk])
+        cls.client = Client()
+        cls.response = cls.client.post(cls.url)        
     
     def test_schema_status_code(self):
         self.assertEqual(self.response.status_code, 200)
@@ -121,5 +120,5 @@ class SchemaViewTests(TestCase):
         self.assertEqual(view.func.__name__, 'SchemaView')
     
     @classmethod
-    def tearDownClass(self):
+    def tearDownClass(cls):
         super().tearDownClass()          

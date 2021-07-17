@@ -1,13 +1,11 @@
 import os
-import time
-from pprint import pprint
 from celery import Celery
 from celery.utils.log import get_task_logger
 from celery.signals import task_postrun
+import root_app.tasks
 
 # from celery.contrib import rdb
-from celery.schedules import crontab
-import root_app.tasks
+# from celery.schedules import crontab
  
 # https://soshace.com/dockerizing-django-with-postgres-redis-and-celery/ 
  

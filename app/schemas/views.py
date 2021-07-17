@@ -8,8 +8,8 @@ from django.forms.models import model_to_dict
 from django.forms import ModelForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from .forms import DataSchemaForm
 from schemas.models import *
+from .forms import DataSchemaForm
 
 
 class AllSchemasView(ListView):
@@ -239,7 +239,8 @@ class SchemaView(TemplateView):
         if form is None:
             form = DataSchemaForm(schema_pk=determined_primary_key)
         context["form"] = form
-        return super(TemplateView, self).render_to_response({"form": context["form"]})
+        # return super(TemplateView, self).render_to_response({"form": context["form"]})
+        return super().render_to_response({"form": context["form"]})
 
     def get_context_data(self, **kwargs):
         context = super(SchemaView, self).get_context_data(**kwargs)

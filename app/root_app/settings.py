@@ -14,8 +14,8 @@ from pathlib import Path
 import os
 import json
 from celery.schedules import crontab
-import root_app.tasks
 from django.core.exceptions import ImproperlyConfigured
+import root_app.tasks
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +30,6 @@ def get_secret(setting):
     except KeyError:
         error_msg = f'Set the {setting} in the config.json file'
         raise ImproperlyConfigured(error_msg)
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -188,4 +187,3 @@ SMTP_PORT = get_secret('SMTP_port')
 SMTP_LOGIN = get_secret('SMTP_login')
 SMTP_PASSWORD = get_secret('SMTP_password')
 ALPHA_VANTAGE_API_KEY = get_secret('ALPHA_VANTAGE_api_key')
-

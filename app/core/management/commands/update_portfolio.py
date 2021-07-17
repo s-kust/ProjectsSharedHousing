@@ -1,9 +1,7 @@
-import os, shutil
-from pathlib import Path
+import os
 import pandas as pd
 import numpy as np
 from django.core.management import BaseCommand
-from django.core.management import call_command 
 from portfoliopositionsreport.models import Portfolio, PortfolioRow
 import portfoliopositionsreport.portfolio_report_images_not_delete as portfolio_report
 
@@ -13,7 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write()
-        self.stdout.write("update_portfolio start 4")
+        self.stdout.write("update_portfolio start")
 
         data_store = portfolio_report.process_full()
         portfolio_rows = data_store.all_ideas

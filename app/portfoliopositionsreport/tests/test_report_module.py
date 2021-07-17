@@ -1,5 +1,5 @@
 from unittest import mock
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 import pandas as pd
 from django.test import TestCase
 from django.conf import settings
@@ -41,15 +41,15 @@ class PortfolioReportModuleTests(TestCase):
         assert not spy_search_result.empty
         
     def test_create_data_for_email_calls_send_email_with_data(self):
-        m = mock.Mock()
-        with mock.patch("portfoliopositionsreport.portfolio_report_images_not_delete.send_email_with_data", m):
+        function_mock = mock.Mock()
+        with mock.patch("portfoliopositionsreport.portfolio_report_images_not_delete.send_email_with_data", function_mock):
             res = portfolio_report.create_data_for_email(self.data_store, None, None)
-        m.assert_called_once()
-        m.assert_called_with(res)
+        function_mock.assert_called_once()
+        function_mock.assert_called_with(res)
         
     def test_create_data_for_email_result(self):
-        m = mock.Mock()
-        with mock.patch("portfoliopositionsreport.portfolio_report_images_not_delete.send_email_with_data", m):
+        function_mock = mock.Mock()
+        with mock.patch("portfoliopositionsreport.portfolio_report_images_not_delete.send_email_with_data", function_mock):
             res = portfolio_report.create_data_for_email(self.data_store, None, None)
         self.assertEqual (res["Subject"], self.data_store.subject)
         self.assertEqual (res["From"], settings.SMTP_STR_FROM)
@@ -58,14 +58,14 @@ class PortfolioReportModuleTests(TestCase):
         self.assertIn ("<br>Have a nice day!", res.as_string())
         
     def test_send_email_with_data(self):
-        m1 = mock.Mock()
-        m2 = mock.Mock()
-        with mock.patch("portfoliopositionsreport.portfolio_report_images_not_delete.send_email_with_data", m1):
+        mock_1 = mock.Mock()
+        mock_2 = mock.Mock()
+        with mock.patch("portfoliopositionsreport.portfolio_report_images_not_delete.send_email_with_data", mock_1):
             res = portfolio_report.create_data_for_email(self.data_store, None, None)
-        with mock.patch("smtplib.SMTP_SSL", m2):
-            fake_smtp = m2(settings.SMTP_HOST, settings.SMTP_PORT)
+        with mock.patch("smtplib.SMTP_SSL", mock_2):
+            fake_smtp = mock_2(settings.SMTP_HOST, settings.SMTP_PORT)
             portfolio_report.send_email_with_data(res)
-            assert (m2.call_count == 2)
+            assert mock_2.call_count == 2
             fake_smtp.connect.assert_called_once_with(settings.SMTP_HOST)
             fake_smtp.login.assert_called_once_with(settings.SMTP_LOGIN, settings.SMTP_PASSWORD)
             fake_smtp.sendmail.assert_called_once_with(settings.SMTP_STR_FROM, settings.SMTP_STR_TO, res.as_string())
