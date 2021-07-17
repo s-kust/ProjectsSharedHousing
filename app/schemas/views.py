@@ -42,6 +42,11 @@ class SchemaView(TemplateView):
         "phonecolumn": PHONE_CH,
     }
 
+    @classmethod
+    def _determine_primary_key(cls, input_data):
+        numbers_filtered = [int(s) for s in input_data.split("_") if s.isdigit()]
+        return numbers_filtered[0]
+
     def save_schema_columns(self, schema, form):
         # print("Inside save_schema_columns function")
         # print(self.subclasses)
@@ -56,18 +61,20 @@ class SchemaView(TemplateView):
 
             type_changed = False
             for subclass in self.subclasses:
-                if hasattr(column, subclass):
-                    type_db = self.column_type_switcher.get(subclass)
-                    if type_db != type_form:
-                        new_class = globals()[type_form]
-                        new_column = new_class()
-                        new_column.name = form.cleaned_data[column_name_field_name]
-                        new_column.order = form.cleaned_data[column_order_field_name]
-                        new_column.schema = schema
-                        column.delete()
-                        new_column.save()
-                        type_changed = True
-                        break
+                if not hasattr(column, subclass):
+                    continue
+                type_db = self.column_type_switcher.get(subclass)
+                if type_db == type_form:
+                    break
+                new_class = globals()[type_form]
+                new_column = new_class()
+                new_column.name = form.cleaned_data[column_name_field_name]
+                new_column.order = form.cleaned_data[column_order_field_name]
+                new_column.schema = schema
+                column.delete()
+                new_column.save()
+                type_changed = True
+                break
             if not type_changed:
                 column.name = form.cleaned_data[column_name_field_name]
                 column.order = form.cleaned_data[column_order_field_name]
@@ -89,8 +96,7 @@ class SchemaView(TemplateView):
 
     def process_btn_add_column(self, elem, form_data):
         # print('Add Column button processing')
-        primary_key_determined = [int(s) for s in elem.split("_") if s.isdigit()][0]
-        # self.pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
+        primary_key_determined = self._determine_primary_key(elem)
         form = DataSchemaForm(form_data, schema_pk=primary_key_determined)
         if form.is_valid():
             schema = get_object_or_404(DataSchemas, pk=primary_key_determined)
@@ -109,7 +115,7 @@ class SchemaView(TemplateView):
 
     def process_btn_delete_column(self, elem, form_data):
         # print('Delete Column button processing')
-        column_pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
+        column_pk = self._determine_primary_key(elem)
         primary_key_to_return = SchemaColumn.objects.get(pk=column_pk).schema.pk
         # self.pk = SchemaColumn.objects.get(pk=column_pk).schema.pk
         SchemaColumn.objects.get(pk=column_pk).delete()
@@ -117,7 +123,7 @@ class SchemaView(TemplateView):
 
     def process_btn_edit_column_details(self, elem, form_data):
         # print('Edit Column details button processing')
-        column_pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
+        column_pk = self._determine_primary_key(elem)
         column = get_object_or_404(SchemaColumn, pk=column_pk)
         # self.pk = column.schema.pk
         for subclass in self.subclasses:
@@ -142,8 +148,7 @@ class SchemaView(TemplateView):
 
     def process_btn_submit_form(self, elem, form_data):
         # print('Submit Form button processing')
-        determined_primary_key = [int(s) for s in elem.split("_") if s.isdigit()][0]
-        # self.pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
+        determined_primary_key = self._determine_primary_key(elem)
         form = DataSchemaForm(form_data, schema_pk=determined_primary_key)
         if form.is_valid():
             schema = get_object_or_404(DataSchemas, pk=determined_primary_key)
@@ -158,33 +163,34 @@ class SchemaView(TemplateView):
 
     def process_btn_save_chng_column(self, elem, form_data):
         # print('Save Changes in Column button processing')
-        column_pk = [int(s) for s in elem.split("_") if s.isdigit()][0]
+        column_pk = self._determine_primary_key(elem)
         column = get_object_or_404(SchemaColumn, pk=column_pk)
         determined_primary_key = column.schema.pk
         # self.pk = column.schema.pk
         for subclass in self.subclasses:
-            if hasattr(column, subclass):
-                column_model = apps.get_model("schemas", subclass)
-                column = get_object_or_404(column_model, pk=column_pk)
-                form_class = self.get_general_column_form(column_model, column_pk)
-                form = form_class(data=form_data, instance=column)
+            if not hasattr(column, subclass):
+                continue
+            column_model = apps.get_model("schemas", subclass)
+            column = get_object_or_404(column_model, pk=column_pk)
+            form_class = self.get_general_column_form(column_model, column_pk)
+            form = form_class(data=form_data, instance=column)
 
-                # from pprint import pprint
-                # print()
-                # print('Before form save')
-                # pprint(vars(column))
-                # print()
+            # from pprint import pprint
+            # print()
+            # print('Before form save')
+            # pprint(vars(column))
+            # print()
 
-                if form.is_valid():
-                    form.save()
-                else:
-                    return (determined_primary_key, form)
+            if form.is_valid():
+                form.save()
+            else:
+                return (determined_primary_key, form)
 
-                # from pprint import pprint
-                # print()
-                # print('After form save')
-                # pprint(vars(column))
-                # print()
+            # from pprint import pprint
+            # print()
+            # print('After form save')
+            # pprint(vars(column))
+            # print()
         return (determined_primary_key, None)
 
     btn_functions = {
@@ -204,7 +210,6 @@ class SchemaView(TemplateView):
         # print()
         context = self.get_context_data()
         determined_primary_key = self.kwargs.get("pk", None)
-        # self.pk = self.kwargs.get("pk", None)
         if determined_primary_key is not None:
             try:
                 _ = DataSchemas.objects.get(pk=determined_primary_key)
