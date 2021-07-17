@@ -5,8 +5,6 @@ asgiref
 django-appconf
 django-cors-headers
 django-crispy-forms
-django-debug-toolbar
-django-haystack
 gunicorn
 model-bakery
 psycopg2-binary
