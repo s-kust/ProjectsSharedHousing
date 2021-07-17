@@ -55,10 +55,7 @@ class SchemaView(TemplateView):
             column_name_field_name = "col_name_%s" % (column.pk,)
             column_order_field_name = "col_order_%s" % (column.pk,)
             column_type_field_name = "col_type_%s" % (column.pk,)
-
             type_form = form.cleaned_data[column_type_field_name]
-            # print(type_form)
-
             type_changed = False
             for subclass in self.subclasses:
                 if not hasattr(column, subclass):
@@ -68,17 +65,19 @@ class SchemaView(TemplateView):
                     break
                 new_class = globals()[type_form]
                 new_column = new_class()
-                new_column.name = form.cleaned_data[column_name_field_name]
-                new_column.order = form.cleaned_data[column_order_field_name]
                 new_column.schema = schema
                 column.delete()
-                new_column.save()
+                self._coumn_fill_save(new_column, form, column_name_field_name, column_order_field_name)
                 type_changed = True
                 break
             if not type_changed:
-                column.name = form.cleaned_data[column_name_field_name]
-                column.order = form.cleaned_data[column_order_field_name]
-                column.save()
+                self._coumn_fill_save(column, form, column_name_field_name, column_order_field_name)
+
+    @classmethod
+    def _coumn_fill_save(cls, column_input, form_input, name_field_name_input, order_field_name_input):
+        column_input.name = form_input.cleaned_data[name_field_name_input]
+        column_input.order = form_input.cleaned_data[order_field_name_input]
+        column_input.save()
 
     def get_general_column_form(self, model_class, column_pk):
         class ColumnFormGeneral(ModelForm):
@@ -217,36 +216,32 @@ class SchemaView(TemplateView):
                 return redirect("all_schemas")
         form = None
         btn_pressed = None
-
-        # source of key.startswith idea - 
-        # https://stackoverflow.com/questions/13101853/select-post-get-parameters-with-regular-expression
         for key in request.POST:
-            if key.startswith("delete_col_"):
-                btn_pressed = "delete_col"
-            if key.startswith("edit_col_"):
-                btn_pressed = "edit_col"
-            if key.startswith("add_column_btn_"):
-                btn_pressed = "add_new_col"
-            if key.startswith("submit_form_"):
-                btn_pressed = "submit_form"
-            if key.startswith("save_schema_columns_chng_btn_"):
-                btn_pressed = "save_schema_columns_chng"
-
-            if btn_pressed is not None:
-                funt_to_call = self.btn_functions.get(btn_pressed)
-                determined_primary_key, form = funt_to_call(self, key, form_data=request.POST)
-                break
-
-        # if self.pk:
-        # print('We have self.pk')
-        # else:
-        # print('no self.pk determined, so processing case - create new schema')
+            btn_pressed = self._determine_button_type(key)
+            if btn_pressed is None:
+                continue            
+            funt_to_call = self.btn_functions.get(btn_pressed)
+            determined_primary_key, form = funt_to_call(self, key, form_data=request.POST)
+            break
         if form is None:
             form = DataSchemaForm(schema_pk=determined_primary_key)
         context["form"] = form
-        # return super(TemplateView, self).render_to_response({"form": context["form"]})
         return super().render_to_response({"form": context["form"]})
 
+    @classmethod
+    def _determine_button_type(cls, input_key):
+        if input_key.startswith("delete_col_"):
+            return "delete_col"
+        if input_key.startswith("edit_col_"):
+            return "edit_col"
+        if input_key.startswith("add_column_btn_"):
+            return "add_new_col"
+        if input_key.startswith("submit_form_"):
+            return "submit_form"
+        if input_key.startswith("save_schema_columns_chng_btn_"):
+            return "save_schema_columns_chng"
+        return None
+    
     def get_context_data(self, **kwargs):
         context = super(SchemaView, self).get_context_data(**kwargs)
         return context
