@@ -169,21 +169,17 @@ CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 
 CELERY_BEAT_SCHEDULE = {
-    # "sample_task": {
-        # "task": "root_app.tasks.sample_task",
-        # "schedule": crontab(minute="*/1"),
-    # },
+    "sample_task": {
+        "task": "root_app.tasks.restore_db_state_schemas",
+        "schedule": crontab(minute="*/15"),
+    },
        
-    # 10 minutes after trading day close
+    # run in 10 minutes after trading day close
     "send_email_report": {
         "task": "root_app.tasks.update_portfolio_and_send_reports",
         "schedule": crontab(minute=10, hour=20, day_of_week='mon,tue,wed,thu,fri'),
     },
 }
-
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "noreply@email.com"
-ADMINS = [("testuser", "test.user@email.com"), ]
 
 SMTP_STR_FROM = get_secret('SMTP_str_from')
 SMTP_STR_TO = get_secret('SMTP_str_to')

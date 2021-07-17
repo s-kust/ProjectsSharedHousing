@@ -95,11 +95,11 @@ class DataSchemaForm(forms.Form):
                 Column(column_type_field_name, css_class="form-group col-md-2 mb-0"),
                 Column(column_order_field_name, css_class="form-group col-md-2 mb-0"),
                 Column(
-                    Submit(delete_btn, "Delete"),
+                    Submit(edit_btn, "Edit Details"),
                     css_class="form-group col-md-auto mb-0 needs_manual",
                 ),
                 Column(
-                    Submit(edit_btn, "Edit Details"),
+                    Submit(delete_btn, "Delete"),
                     css_class="form-group col-md-auto mb-0 needs_manual",
                 ),
                 css_class="form-row",

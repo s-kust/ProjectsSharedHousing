@@ -54,16 +54,13 @@ def setup_periodic_tasks(sender, **kwargs):
     # Calls test('world') every 30 seconds
     # sender.add_periodic_task(3.0, test.s('world'), name='world', expires=10)
 
-@app.task(track_started=True)
-def test_task(arg):
-    logger.info('Inside task function with argument {0}'.format(arg))
-    # print('Inside task function')
-    # print(arg)
-    with open("celery_test.txt", "a+") as myfile:
-        myfile.write(str(arg)+"\n")
-    # rdb.set_trace()
-    logger.info('Finishing task with argument {0}'.format(arg))
-    return "Success-zzz"
+# @app.task(track_started=True)
+# def test_task(arg):
+    # logger.info('Inside task function with argument {0}'.format(arg))
+    # with open("celery_test.txt", "a+") as myfile:
+        # myfile.write(str(arg)+"\n")
+    # logger.info('Finishing task with argument {0}'.format(arg))
+    # return "Success-zzz"
 
 
 # print('Before autodiscover_tasks')
@@ -71,14 +68,7 @@ app.autodiscover_tasks()
 # print('After autodiscover_tasks')
 
 @task_postrun.connect
-def after_task(**kwargs):
-    # print('BEGIN after_task')
-    # print('task_id -', kwargs.get('task_id'))
-    # print('args -', kwargs.get('args'))
-    # print('state -', kwargs.get('state'))
-    # print('retval -', kwargs.get('retval'))
-    # print('END after_task')
-    
+def after_task(**kwargs):   
     logger.info('BEGIN after_task')
     logger.info('task_id -' + kwargs.get('task_id'))
     logger.info('args - ' + str(kwargs.get('args')))
