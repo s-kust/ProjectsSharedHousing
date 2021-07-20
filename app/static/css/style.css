@@ -1511,6 +1511,9 @@ form#newsletter input[type=submit] {
 	header {
 		min-height: 64px;
 	}
+	.img-wrapper {
+		margin-left: -8em;
+	}
 	
 }
 
@@ -1520,6 +1523,9 @@ form#newsletter input[type=submit] {
 	
 	header {
 		min-height: 64px;
+	}
+	.img-wrapper {
+		margin-left: -6em;
 	}
 	
 }
@@ -1531,6 +1537,9 @@ form#newsletter input[type=submit] {
 	header {
 		min-height: 64px;
 	}
+	.img-wrapper {
+		margin-left: -4em;
+	}
 	
 }
 
@@ -1540,6 +1549,9 @@ form#newsletter input[type=submit] {
 	
 	header {
 		min-height: 64px;
+	}
+	.img-wrapper {
+		margin-left: -4em;
 	}
 	
 }	

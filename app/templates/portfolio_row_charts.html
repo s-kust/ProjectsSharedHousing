@@ -18,12 +18,12 @@
 	</div>
 	<!-- end: Page Title -->				
 	<div  class="container">
-		<p><a href="{% url 'portfolio_root' %}">Return to the list of all portfolio items</a></p>
+		<div><a href="{% url 'portfolio_root' %}">Return to the list of all portfolio items</a></div>
 		{% if row.file_1 %}
-		<p><img src="{{ row.file_1.url }}"></p>
+		<div class="img-wrapper" style="padding-top: 2em;"><img src="{{ row.file_1.url }}" class="img-fluid"></div>
 		{% endif %}
 		{% if row.file_2 %}
-		<p><img src="{{ row.file_2.url }}"></p>
+		<div class="img-wrapper"><img src="{{ row.file_2.url }}" class="img-fluid"></div>
 		{% endif %}
 	</div>										
 {% endblock %}

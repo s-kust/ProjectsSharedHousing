@@ -173,10 +173,10 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(minute="*/15"),
     },
        
-    # run in 10 minutes after trading day close
+    # run in 70 minutes after trading day close
     "send_email_report": {
         "task": "root_app.tasks.update_portfolio_and_send_reports",
-        "schedule": crontab(minute=10, hour=20, day_of_week='mon,tue,wed,thu,fri'),
+        "schedule": crontab(minute=10, hour=21, day_of_week='mon,tue,wed,thu,fri'),
     },
 }
 
