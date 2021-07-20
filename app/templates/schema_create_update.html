@@ -1,7 +1,26 @@
 {% extends '_base.html' %}
 
-{% load crispy_forms_tags %}
-
 {% block content %}
-{% crispy form %}
+		<!-- start: Page Title -->
+	<div id="page-title">
+
+		<div id="page-title-inner">
+
+			<!-- start: Container -->
+			<div class="container">
+
+				<h2><i class="ico-stats ico-white"></i>Django Crispy Forms Advanced Usage Example</h2>
+
+			</div>
+			<!-- end: Container  -->
+
+		</div>	
+
+	</div>
+	<!-- end: Page Title -->				
+	<div class="container">
+		<p><a href="{% url 'all_schemas' %}">Return to the list of all schemas</a></p>
+		{% load crispy_forms_tags %}
+		{% crispy form %}
+	</div>										
 {% endblock %}

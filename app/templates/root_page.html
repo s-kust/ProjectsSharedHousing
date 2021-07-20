@@ -1,11 +1,38 @@
 {% extends '_base.html' %}
 
 {% block content %}
-<p>Hello! Thank you for visiting this site. These are my Python/Django projects. Finally, I figured out to collect them all under one roof. Hope you find something useful here.</p>
-<p>Best regards, Serhii Kushchenko (<a href="https://www.linkedin.com/in/kushchenko/" target="_blank">my LinkedIn profile</a>)</p>
-<ul>
-<li><a href="{% url 'portfolio_root' %}">Stocks, ETFs, and Currencies Portfolio Positions - Daily Reports on E-mail</a></li>
-<li><a href="{% url 'all_schemas' %}">Django Crispy Forms Advanced Usage Example</a></li>
-</ul>
+		<!-- start: Page Title -->
+	<div id="page-title">
+
+		<div id="page-title-inner">
+
+			<!-- start: Container -->
+			<div class="container">
+
+				<h2><i class="ico-stats ico-white"></i>Homepage (lisf of projects)</h2>
+
+			</div>
+			<!-- end: Container  -->
+
+		</div>	
+
+	</div>
+	<!-- end: Page Title -->			
+	<div class="container">
+		<p>Hello! Thank you for visiting this site. Here are my projects related to:</p>
+		<ul class="list-group">
+		<li class="list-group-item">Python/Django</li> 
+		<li class="list-group-item">Data analysis</li> 
+		<li class="list-group-item">Machine learning</li>
+		</ul>
+		<p>Finally, I figured out to collect them all under one roof.</p>
+		<p>Hope you find something useful here. For example, you can follow the daily chart updates for the stocks and currencies that I am interested in.</p>
+		<p>Best regards, Serhii Kushchenko.</p>
+		<p>Please see the projects live:</p>
+		<ul class="list-group">
+		<li class="list-group-item"><a href="{% url 'portfolio_root' %}">Stocks, ETFs, and Currencies Portfolio Positions - Daily Reports on E-mail</a></li>
+		<li class="list-group-item"><a href="{% url 'all_schemas' %}">Django Crispy Forms Advanced Usage Example</a></li>
+		</ul>
+	</div>										
 {% endblock %}
 

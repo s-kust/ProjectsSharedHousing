@@ -1,26 +1,43 @@
 {% extends '_base.html' %}
 
 {% block content %}
-<p>This project aims to demonstrate the creation and processing of the large and complex form in Django using <code>django-crispy-forms</code>. You can edit the names of data schemes, add new schemes, and delete them. Also, edit columns, including changing their types and parameter values.</p>
-<p>Don't be surprised when your editing results disappear. The schemes and their columns are reset every 15 minutes using a Celery task.</p>
-<p>Please see the project <a href="https://github.com/s-kust/django-advanced-forms" target="_blank">code on github</a> and description <a href="https://dev.to/djangotricks/guest-post-django-crispy-forms-advanced-usage-example-51m0" target="_blank">here</a></p>
-<table class="table-bordered">
-  <tr>
-    <th>Title</th>
-    <th>Modified</th>
-	<th colspan="2"></th>
-	<!-- <th></th> -->
-  </tr>
-{% for schema in object_list %}
-<tr>
-    <td>{{ schema.name }}</td>
-	<td>{{ schema.modif_date }}</td>
-	<td><form action="{% url 'schema_create_update' schema.pk %}" method="post"><input type="submit" value="Edit" class = "btn btn-primary">{% csrf_token %}</form></td>
-	<td><form action="{% url 'delete_schema' schema.pk %}" method="post"><input type="submit" value="Delete" class = "btn btn-primary">{% csrf_token %}</form></td>
-</tr>
-{% endfor %}  
-</table>
-<form action="{% url 'schema_create_update' %}" method="post"><input type="submit" value="Create new schema" class = "btn btn-primary" style="margin: 0.5em;">{% csrf_token %}</form>
+		<!-- start: Page Title -->
+	<div id="page-title">
 
+		<div id="page-title-inner">
+
+			<!-- start: Container -->
+			<div class="container">
+
+				<h2><i class="ico-stats ico-white"></i>Django Crispy Forms Advanced Usage Example</h2>
+
+			</div>
+			<!-- end: Container  -->
+
+		</div>	
+
+	</div>
+	<!-- end: Page Title -->			
+	<div class="container">
+		<p>This project aims to demonstrate the creation and processing of the large and complex form in Django using <code>django-crispy-forms</code>. You can edit the names of data schemes, add new schemes, and delete them. Also, edit columns, including changing their types and parameter values.</p>
+		<p>Don't be surprised when your editing results disappear. The schemes and their columns are reset every 15 minutes using a Celery task.</p>
+		<p>Please see the project <a href="https://github.com/s-kust/django-advanced-forms" target="_blank">code on github</a> and description <a href="https://dev.to/djangotricks/guest-post-django-crispy-forms-advanced-usage-example-51m0" target="_blank">here</a></p>
+		<table class="table-bordered">
+		  <tr>
+			<th>Title</th>
+			<th>Modified</th>
+			<th colspan="2"></th>
+		  </tr>
+		{% for schema in object_list %}
+		<tr>
+			<td>{{ schema.name }}</td>
+			<td>{{ schema.modif_date }}</td>
+			<td><form action="{% url 'schema_create_update' schema.pk %}" method="post"><input type="submit" value="Edit" class = "btn btn-primary">{% csrf_token %}</form></td>
+			<td><form action="{% url 'delete_schema' schema.pk %}" method="post"><input type="submit" value="Delete" class = "btn btn-primary">{% csrf_token %}</form></td>
+		</tr>
+		{% endfor %}  
+		</table>
+		<form action="{% url 'schema_create_update' %}" method="post"><input type="submit" value="Create new schema" class = "btn btn-primary" style="margin: 0.5em;">{% csrf_token %}</form>
+	</div>										
 {% endblock %}
 

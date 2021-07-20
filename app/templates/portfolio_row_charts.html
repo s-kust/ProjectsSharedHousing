@@ -1,11 +1,30 @@
 {% extends '_base.html' %}
 {% block content %}
-<p><a href="{% url 'portfolio_root' %}">Return to the list of all portfolio items</a></p>
-{% if row.file_1 %}
-<p><img src="{{ row.file_1.url }}"></p>
-{% endif %}
-{% if row.file_2 %}
-<p><img src="{{ row.file_2.url }}"></p>
-{% endif %}
+		<!-- start: Page Title -->
+	<div id="page-title">
+
+		<div id="page-title-inner">
+
+			<!-- start: Container -->
+			<div class="container">
+
+				<h2><i class="ico-stats ico-white"></i>Stocks, ETFs, and Currencies: Daily Reports on E-mail</h2>
+
+			</div>
+			<!-- end: Container  -->
+
+		</div>	
+
+	</div>
+	<!-- end: Page Title -->				
+	<div  class="container">
+		<p><a href="{% url 'portfolio_root' %}">Return to the list of all portfolio items</a></p>
+		{% if row.file_1 %}
+		<p><img src="{{ row.file_1.url }}"></p>
+		{% endif %}
+		{% if row.file_2 %}
+		<p><img src="{{ row.file_2.url }}"></p>
+		{% endif %}
+	</div>										
 {% endblock %}
 

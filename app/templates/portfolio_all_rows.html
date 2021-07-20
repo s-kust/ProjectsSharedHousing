@@ -1,31 +1,50 @@
 {% extends '_base.html' %}
 
 {% block content %}
-<p>I use this application for daily monitoring of stocks and currencies that interest me. The main Python script works as follows:</p>
-<ol><li>It gets a list of stocks or ETF tickers from the Google Spreadsheet.</li>
-<li>For each position, it downloads the recent Open-High-Low-Close prices data. Currently, the source of data is Alpha Vantage.</li>
-<li>Using the obtained data, the system generates a report with charts and sends it to my email.</li>
-<li>You can see the list of tickers and their recent charts below.</li></ol>
-<p>The user can effortlessly change the set of items in the watchlist. The only needed device is a smartphone that works with Google Spreadsheets.</p>
-<p>Please see the project code and full description on <a href="https://github.com/s-kust/PortfolioPositionsReports" target="_blank">github</a></p>
-<p>Last portfolio update: {{ modified_date }}</p>
-<table class="table-bordered">
-  <tr>
-    <th>Ticker 1</th>
-	<th>Ticker 2</th>
-	<th>Type</th>
-	<th>Note</th>
-	<th>Link</th>
-  </tr>
-{% for portfolio_row in object_list %}
-<tr>
-    <td>{{ portfolio_row.ticker_1 }}</td>
-	<td>{{ portfolio_row.ticker_2 }}</td>
-	<td>{{ portfolio_row.row_type }}</td>
-	<td>{{ portfolio_row.note }}</td>
-	<td><a href="{% url 'row_charts' portfolio_row.pk %}">charts</a></td>
-</tr>
-{% endfor %}  
-</table>
+		<!-- start: Page Title -->
+	<div id="page-title">
+
+		<div id="page-title-inner">
+
+			<!-- start: Container -->
+			<div class="container">
+
+				<h2><i class="ico-stats ico-white"></i>Stocks, ETFs, and Currencies: Daily Reports on E-mail</h2>
+
+			</div>
+			<!-- end: Container  -->
+
+		</div>	
+
+	</div>
+	<!-- end: Page Title -->				
+	<div class="container">
+		<p>I use this application for daily monitoring of stocks and currencies that interest me. The main Python script works as follows:</p>
+		<ol class="list-group list-group-numbered"><li class="list-group-item">It gets a list of stocks or ETF tickers from the Google Spreadsheet.</li>
+		<li class="list-group-item">For each position, it downloads the recent Open-High-Low-Close prices data. Currently, the source of data is Alpha Vantage.</li>
+		<li class="list-group-item">Using the obtained data, the system generates a report with charts and sends it to my email.</li>
+		<li class="list-group-item">You can see the list of tickers and their recent charts below.</li></ol>
+		<p>The user can effortlessly change the set of items in the watchlist. The only needed device is a smartphone that works with Google Spreadsheets.</p>
+		<p>Please see the project code and full description on <a href="https://github.com/s-kust/PortfolioPositionsReports" target="_blank">github</a></p>
+		<p>Last portfolio update: {{ modified_date }}</p>
+		<table class="table">
+		  <tr>
+			<th>Ticker 1</th>
+			<th>Ticker 2</th>
+			<th>Type</th>
+			<th>Note</th>
+			<th>Link</th>
+		  </tr>
+		{% for portfolio_row in object_list %}
+		<tr>
+			<td>{{ portfolio_row.ticker_1 }}</td>
+			<td>{{ portfolio_row.ticker_2 }}</td>
+			<td>{{ portfolio_row.row_type }}</td>
+			<td>{{ portfolio_row.note }}</td>
+			<td><a href="{% url 'row_charts' portfolio_row.pk %}">charts</a></td>
+		</tr>
+		{% endfor %}  
+		</table>
+	</div>										
 {% endblock %}
 
