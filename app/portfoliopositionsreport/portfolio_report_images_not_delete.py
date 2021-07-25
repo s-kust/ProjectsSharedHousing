@@ -2,7 +2,6 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
-# from IPython.core.debugger import set_trace
 import os
 import glob
 import asyncio
@@ -17,8 +16,6 @@ from django.conf import settings
 
 class DataStore:
     def __init__(self):
-        # self.config = config_input
-        # self.api_key = self.config["Alpha_vantage"]["api_key"]
         self.api_key = settings.ALPHA_VANTAGE_API_KEY
         self.start_date = datetime.datetime.now() - datetime.timedelta(days=1.5 * 365)
         self.all_ideas = create_portfolio_df_from_worksheets()
@@ -98,8 +95,6 @@ def _add_image_to_msg_root(message_root, image_path, header, subject_text):
 def create_data_for_email(data_store_object, filename_1, filename_2=None):
     msg_root = MIMEMultipart("related")
     msg_root["Subject"] = data_store_object.subject
-    # msg_root["From"] = data_store_object.config["SMTP_data"]["str_from"]
-    # msg_root["To"] = data_store_object.config["SMTP_data"]["str_to"]
     msg_root["From"] = settings.SMTP_STR_FROM
     msg_root["To"] = settings.SMTP_STR_TO
     msg_root.preamble = "This is a multi-part message in MIME format, with pictures."
@@ -317,6 +312,10 @@ async def process_row(row, data_store_object):
         await _process_relative_two_tickers(row, data_store_object)
 
 
+async def tasks_gather_run(data_store_object):
+    _ = await asyncio.gather(*[process_row(row_values, data_store_object) for _, row_values in data_store_object.all_ideas.iterrows()])
+
+
 def process_full():
     data_store = DataStore()
     png_files = [file for file in glob.glob("/app/media/*.png")]
@@ -324,10 +323,7 @@ def process_full():
         os.remove(png_file)
     if not os.path.exists('images'):
         os.makedirs('images')
-    loop = asyncio.get_event_loop()
-    tasks = asyncio.gather(*[process_row(row_values, data_store) for _, row_values in data_store.all_ideas.iterrows()])
-    loop.run_until_complete(tasks)
-    loop.close()
+    asyncio.run(tasks_gather_run(data_store))
 
     if (len(data_store.tickers_failed_import) > 0) or (len(data_store.tickers_failed_processing) > 0):
         full_list = data_store.tickers_failed_import + data_store.tickers_failed_processing
