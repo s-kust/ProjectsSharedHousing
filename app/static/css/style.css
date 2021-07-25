@@ -1,23 +1,6 @@
-/*!
-* Author: Łukasz Holeczek
-* Template: GotYA - HTML5 Responsive Bootstrap Theme
-* Version: 1.0.0 
-* Bootstrap version: 2.1.
-* Copyright 2013 creativeLabs
-* www: http://bootstrapmaster.com
-* mail: lukasz@bootstrapmaster.com
-* You can buy this theme on WrapBootstrap: https://wrapbootstrap.com/theme/simpliq-flat-responsive-admin-template-WB0N1X0T1
-* You can find our other themes on: https://bootstrapmaster.com
-*/
-
-
 /* Import Section
 =================================================================== */
 @import url("icons.css");				/* Icons. */
-@import url("icons-color.css");			/* Icons. */  
-@import url("social-icons.css");		/* Social Icons */
-@import url("hover.css");				/* Hover CSS3 Effect */
-@import url("parallax-slider.css");		/* Parallax Slider */
 
 .clear {
 	clear:both;

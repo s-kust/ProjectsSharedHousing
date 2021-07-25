@@ -168,15 +168,20 @@ CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 
 CELERY_BEAT_SCHEDULE = {
-    "sample_task": {
+    "restore_db_state_schemas": {
         "task": "root_app.tasks.restore_db_state_schemas",
         "schedule": crontab(minute="*/15"),
     },
        
     # run in 70 minutes after trading day close
-    "send_email_report": {
+    "update_portfolio_and_send_emails": {
         "task": "root_app.tasks.update_portfolio_and_send_reports",
         "schedule": crontab(minute=10, hour=21, day_of_week='mon,tue,wed,thu,fri'),
+    },
+    
+    "clear_lof_file_weekly": {
+        "task": "root_app.tasks.clear_lof_file",
+        "schedule": crontab(minute=10, hour=6, day_of_week='sun'),
     },
 }
 
