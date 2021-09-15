@@ -19,13 +19,13 @@
 	</div>
 	<!-- end: Page Title -->				
 	<div class="container">
-		<p>I use this application for daily monitoring of stocks and currencies that interest me. The main Python script works as follows:</p>
-		<ol class="list-group list-group-numbered"><li class="list-group-item">It gets a list of stocks or ETF tickers from the Google Spreadsheet.</li>
+		<p>I use this application for daily monitoring of stocks and currencies that interest me. Initially, it was a Python script that I later packaged as a Django application. It works as follows:</p>
+		<ol class="list-group list-group-numbered"><li class="list-group-item">Get a list of stocks, currency pairs and ETF tickers from the Google Spreadsheet.</li>
 		<li class="list-group-item">For each position, it downloads the recent Open-High-Low-Close prices data. Currently, the source of data is Alpha Vantage.</li>
-		<li class="list-group-item">Using the obtained data, the system generates a report with charts and sends it to my email.</li>
-		<li class="list-group-item">You can see the list of tickers and their recent charts below.</li></ol>
+		<li class="list-group-item">Using the obtained data, the system generates reports with charts and sends those reports to the specified email.</li>
+		<li class="list-group-item">In addition to sending by mail, charts are saved on the server. You can see the list of tickers and their recent charts below.</li></ol>
 		<p>The user can effortlessly change the set of items in the watchlist. The only needed device is a smartphone that works with Google Spreadsheets.</p>
-		<p>Please see the project code and full description on <a href="https://github.com/s-kust/PortfolioPositionsReports" target="_blank">github</a></p>
+		<p>Please see the project code and full description on <a href="https://github.com/s-kust/ProjectsSharedHousing" target="_blank">github</a></p>
 		<p>Last portfolio update: {{ modified_date }}</p>
 		<table class="table">
 		  <tr>
