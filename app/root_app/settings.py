@@ -182,7 +182,7 @@ CELERY_BEAT_SCHEDULE = {
     "clear_lof_file_weekly": {
         "task": "root_app.tasks.clear_lof_file",
         "schedule": crontab(minute=10, hour=6, day_of_week='sun'),
-    },
+    },    
 }
 
 SMTP_STR_FROM = get_secret('SMTP_str_from')

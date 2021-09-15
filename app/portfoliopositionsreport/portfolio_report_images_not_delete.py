@@ -45,34 +45,33 @@ def create_email_subject(symbol1, symbol2=None):
 
 def create_charts(tickers_data, symbol1, symbol2=None):
     folder = '/app/media'
+    horizontal_size = 794
+    vertical_size = 512
+    my_plots_dpi = 100  # number determined by trial and error
     if symbol2 is None:
         job_type = "single"
-        filename_1 = symbol1 + "_long_period" + ".png"
-        filename_1 = os.path.join(folder, filename_1)
+        filename_1 = symbol1 + "_long_period" + ".png"        
         filename_2 = symbol1 + "_short_period" + ".png"
         filename_2 = os.path.join(folder, filename_2)
         data = tickers_data[symbol1]
     else:
         job_type = "relative"
         filename_1 = symbol1 + "_" + symbol2 + ".png"
-        filename_1 = os.path.join(folder, filename_1)
         filename_2 = None
         data = tickers_data[symbol1] / tickers_data[symbol2]
-    my_plots_dpi = 100  # number determined by trial and error
+    filename_1 = os.path.join(folder, filename_1)
+    res1 = data.tail(350)  # 350 last trading days, approximately 1.5 years
     if job_type == "single":  # build and save two charts
-        res1 = data.tail(350)  # 350 last trading days, approximately 1.5 years
-        mpf.plot(res1, type="line", style="yahoo", title=symbol1 + " Daily Prices last 1.5 years",
-                 figsize=(794 / my_plots_dpi, 512 / my_plots_dpi), savefig=filename_1, )
-        res1 = data.tail(50)  # 50 last trading days - more days is inconvenient at the chart
-        atr_plot = mpf.make_addplot(res1["ATR"], panel=2, ylabel="ATR")
-        mpf.plot(res1, type="ohlc", style="yahoo", addplot=atr_plot, \
+        line_plot_title = symbol1 + " Daily Prices last 1.5 years"
+        res2 = data.tail(50)  # 50 last trading days - more days is inconvenient at the chart
+        atr_plot = mpf.make_addplot(res2["ATR"], panel=2, ylabel="ATR")
+        mpf.plot(res2, type="candle", style="yahoo", addplot=atr_plot, \
             title=symbol1 + " Daily Prices last 2.5 months", \
-                volume=True, figsize=(794 / my_plots_dpi, 512 / my_plots_dpi), savefig=filename_2, )
+                volume=True, figsize=(horizontal_size / my_plots_dpi, vertical_size / my_plots_dpi), savefig=filename_2, )
     else:  # job_type relative, two symbols, not single, only one chart
-        res1 = data.tail(350)  # 350 last trading days, approximately 1.5 years
-        mpf.plot(res1, type="line", style="yahoo",
-                 title="Relative " + symbol1 + "-" + symbol2 + " Daily Prices last 1.5 years",
-                 figsize=(794 / my_plots_dpi, 512 / my_plots_dpi), savefig=filename_1, )
+        line_plot_title = "Relative " + symbol1 + "-" + symbol2 + " Daily Prices last 1.5 years"
+    mpf.plot(res1, type="line", style="yahoo", title=line_plot_title,
+             figsize=(horizontal_size / my_plots_dpi, vertical_size / my_plots_dpi), savefig=filename_1, )
     return filename_1, filename_2
 
 
